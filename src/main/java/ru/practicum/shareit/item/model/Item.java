@@ -13,12 +13,12 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 public class Item {
     private Long id;
-    @NotBlank
+    @NotBlank @NotNull
     private String name;
-    @NotBlank
+    @NotBlank @NotNull
     private String description;
-    @NotNull
-    private Boolean isAvailable;
+    @NotBlank @NotNull
+    private Boolean available;
     @PositiveOrZero
     private Long owner;
     private ItemRequest request;
