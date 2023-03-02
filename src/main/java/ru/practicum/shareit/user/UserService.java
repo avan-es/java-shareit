@@ -29,4 +29,14 @@ public class UserService {
         userValidation.emailIsFree(userDto);
         return userRepository.updateUser(userDto);
     }
+
+    public User getUserById(Long userId) {
+        userValidation.isPresent(userId);
+        return userRepository.getUserById(userId);
+    }
+
+    public void deleteUser(Long userId) {
+        userValidation.isPresent(userId);
+        userRepository.deleteUser(userId);
+    }
 }
