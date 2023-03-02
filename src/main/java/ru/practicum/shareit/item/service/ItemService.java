@@ -50,4 +50,9 @@ public class ItemService {
     public List<ItemDto> getAllItems() {
         return itemRepository.getItems();
     }
+
+    public void deleteItem(Long itemId) {
+        itemValidation.isPresent(itemId);
+        itemRepository.deleteItem(itemId);
+    }
 }
