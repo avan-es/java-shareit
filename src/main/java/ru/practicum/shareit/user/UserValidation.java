@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exeptions.ModelConflictException;
 import ru.practicum.shareit.exeptions.ModelValidationException;
+import ru.practicum.shareit.exeptions.NotFoundException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ public class UserValidation {
     }
 
 
-    public void userEmailValidation(User user) {
+    public void emailValidation(UserDto user) {
         if (!validateEmail(user.getEmail())) {
             throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
                     user.getEmail()));
@@ -46,5 +47,33 @@ public class UserValidation {
             }
         }
 
+    }
+
+    public void emailIsFree(UserDto user) {
+        if (user.getEmail() != null) {
+            if (!validateEmail(user.getEmail())) {
+                throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
+                        user.getEmail()));
+            }
+            if (!userRepository.getAllUsers().isEmpty()) {
+                User userForUpdate = userRepository.getUserById(user.getId());
+                if (!userForUpdate.getEmail().equals(user.getEmail())) {
+                    if (userRepository.getAllUsers().stream()
+                            .map(User::getEmail).collect(Collectors.toList())
+                            .contains(user.getEmail())) {
+                        throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
+                                user.getEmail()));
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void isPresent (Long userId) {
+        if (!userRepository.getAllUsers().stream()
+                .anyMatch(user -> user.getId().equals(userId))) {
+            throw new NotFoundException(String.format("Пользователь с ID %d не найден.", userId));
+        };
     }
 }
