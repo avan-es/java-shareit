@@ -19,7 +19,10 @@ public class InMemoryUserRepository implements UserRepository{
 
     @Override
     public User getUserById(Long id) {
-        return null;
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     @Override
