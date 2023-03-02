@@ -15,11 +15,18 @@ public class UserService {
 
 
     public User addUser(User user) {
-        userValidation.userEmailValidation(UserMapper.toUserDto(user));
+        userValidation.emailValidation(UserMapper.toUserDto(user));
         return userRepository.addUser(user);
     }
 
     public List<User> getUsers() {
         return userRepository.getAllUsers();
+    }
+
+    public User updateUser(UserDto userDto, Long userId) {
+        userValidation.isPresent(userId);
+        userDto.setId(userId);
+        userValidation.emailIsFree(userDto);
+        return userRepository.updateUser(userDto);
     }
 }
