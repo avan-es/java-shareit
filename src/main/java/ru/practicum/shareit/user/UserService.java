@@ -13,7 +13,7 @@ public class UserService {
 
 
     public User addUser(User user) {
-        userValidation.userValidation(user);
+        userValidation.userEmailValidation(user);
         return userRepository.addUser(user);
     }
 }
