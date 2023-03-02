@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.model;
 
 import lombok.Data;
 
@@ -13,5 +13,5 @@ public class User {
     @NotBlank
     private String name;
     @NotBlank
-    private String email; //Must be uniq
+    private String email;
 }

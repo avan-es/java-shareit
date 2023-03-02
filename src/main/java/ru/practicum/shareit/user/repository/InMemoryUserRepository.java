@@ -1,12 +1,14 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component("inMemoryUserRepository")
-public class InMemoryUserRepository implements UserRepository{
+public class InMemoryUserRepository implements UserRepository {
 
     private final List<User> users = new ArrayList<>();
 
@@ -52,11 +54,6 @@ public class InMemoryUserRepository implements UserRepository{
     }
 
     private Long getId() {
-        /*Long lastId = users.stream()
-                .mapToLong(User::getId)
-                .max()
-                .orElse(0);
-        return lastId + 1;*/
         return ++actualId;
     }
 }
