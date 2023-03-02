@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 @Component("itemMapper")
 public class ItemMapper {
-    public static ItemDto toItemDto (Item item){
+    public static ItemDto toItemDto(Item item) {
         ItemDto itemDto = new ItemDto();
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());

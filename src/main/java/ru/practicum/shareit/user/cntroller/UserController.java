@@ -22,23 +22,23 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getUsers () {
+    public List<UserDto> getUsers() {
         return userService.getUsers();
     }
 
     @PatchMapping("/{userId}")
-    public UserDto updateUser (@RequestBody UserDto userDto,
+    public UserDto updateUser(@RequestBody UserDto userDto,
                             @PathVariable Long userId) {
         return userService.updateUser(userDto, userId);
     }
 
     @GetMapping("/{userId}")
-    public UserDto getUsers (@PathVariable Long userId) {
+    public UserDto getUsers(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser (@PathVariable Long userId) {
+    public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }
 

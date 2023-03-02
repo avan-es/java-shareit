@@ -18,6 +18,7 @@ public class InMemoryItemRepository implements ItemRepository {
 
     private final List<Item> items = new ArrayList<>();
     private Long actualId = 0L;
+
     @Override
     public ItemDto addItem(Item item) {
         item.setId(getId());
@@ -45,13 +46,13 @@ public class InMemoryItemRepository implements ItemRepository {
     public ItemDto updateItem(ItemDto itemDto, Long userId) {
         Item itemForUpdate = getItemById(itemDto.getId());
         isUserIsOwner(itemForUpdate, userId);
-        if (itemDto.getName() != null && !itemDto.getName().isBlank()){
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             itemForUpdate.setName(itemDto.getName());
         }
-        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()){
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
             itemForUpdate.setDescription(itemDto.getDescription());
         }
-        if ((Optional.ofNullable(itemDto.getAvailable()).isPresent())){
+        if ((Optional.ofNullable(itemDto.getAvailable()).isPresent())) {
             itemForUpdate.setAvailable(itemDto.getAvailable());
         }
         log.info(String.format("Объект с ID %s успешно обновлён.", itemForUpdate.getId()));
@@ -98,8 +99,8 @@ public class InMemoryItemRepository implements ItemRepository {
         return ++actualId;
     }
 
-    private void isUserIsOwner (Item item, Long userId) {
-        if(!item.getOwner().equals(userId)) {
+    private void isUserIsOwner(Item item, Long userId) {
+        if (!item.getOwner().equals(userId)) {
             log.error(String.format("Ошибка обновления. Пользователь с ID %s не является владельцем объекта '%s'.",
                     userId, item.getName()));
             throw new ForbiddenException(String.format("Вы не являетесь владельцем объекта '%s'.", item.getName()));

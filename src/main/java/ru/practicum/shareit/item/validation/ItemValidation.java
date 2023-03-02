@@ -17,7 +17,7 @@ public class ItemValidation {
     @Qualifier("inMemoryItemRepository")
     private ItemRepository itemRepository;
 
-    public void itemValidation (Item item) {
+    public void itemValidation(Item item) {
         if (item.getName().isBlank()) {
             log.error(String.format("Объект не создан. Отсутствует название."));
             throw new ModelValidationException("Имя не может быть пустым.");
@@ -33,11 +33,10 @@ public class ItemValidation {
         }
     }
 
-    public void isPresent (Long itemId) {
+    public void isPresent(Long itemId) {
         if (!itemRepository.getItems().stream()
                 .anyMatch(item -> item.getId().equals(itemId))) {
             log.error(String.format("Объект с ID %s не найден.", itemId));
-            throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
-        };
+            throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));};
     }
 }
