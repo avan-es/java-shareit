@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.validation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component("userValidation")
+@Slf4j
 public class UserValidation {
 
     @Autowired
@@ -40,12 +42,14 @@ public class UserValidation {
 
     public void emailValidation(UserDto user) {
         if (!validateEmail(user.getEmail())) {
+            log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
             throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
                     user.getEmail()));
         } else if (!userRepository.getAllUsers().isEmpty()) {
             if (userRepository.getAllUsers().stream()
                     .map(UserDto::getEmail).collect(Collectors.toList())
                     .contains(user.getEmail())) {
+                log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
                 throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
                         user.getEmail()));
             }
@@ -56,6 +60,7 @@ public class UserValidation {
     public void emailIsFree(UserDto user) {
         if (user.getEmail() != null) {
             if (!validateEmail(user.getEmail())) {
+                log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
                 throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
                         user.getEmail()));
             }
@@ -65,6 +70,7 @@ public class UserValidation {
                     if (userRepository.getAllUsers().stream()
                             .map(UserDto::getEmail).collect(Collectors.toList())
                             .contains(user.getEmail())) {
+                        log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
                         throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
                                 user.getEmail()));
                     }
@@ -77,6 +83,7 @@ public class UserValidation {
     public void isPresent (Long userId) {
         if (!userRepository.getAllUsers().stream()
                 .anyMatch(user -> user.getId().equals(userId))) {
+            log.error(String.format("Пользователь с ID %s не существует.", userId));
             throw new NotFoundException(String.format("Пользователь с ID %d не найден.", userId));
         };
     }
