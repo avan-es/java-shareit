@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ItemRepository {
 
-    Item addItem (Item item);
+    ItemDto addItem (Item item);
     Item getItemById (Long itemId);
-    List<Item> getItems ();
-    Item updateItem (ItemDto itemDto);
+    List<ItemDto> getItems ();
+    ItemDto updateItem (ItemDto itemDto, Long userId);
     void deleteItem (Long itemId);
 
-    List<Item> getUsersItems(Long userId);
+    List<ItemDto> getUsersItems(Long userId);
 
-    List<Item> searchItem(String req);
+    List<ItemDto> searchItem(String req);
 }

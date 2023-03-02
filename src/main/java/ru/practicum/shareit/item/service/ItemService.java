@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.validation.ItemValidation;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -17,37 +18,36 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserValidation userValidation;
     private final ItemValidation itemValidation;
-    public Item addItem(Item item, Long userId) {
+    public ItemDto addItem(Item item, Long userId) {
         userValidation.isPresent(userId);
         itemValidation.itemValidation(item);
         item.setOwner(userId);
         return itemRepository.addItem(item);
     }
 
-    public Item updateItem(ItemDto itemDto, Long itemId, Long userId) {
+    public ItemDto updateItem(ItemDto itemDto, Long itemId, Long userId) {
         userValidation.isPresent(userId);
         itemValidation.isPresent(itemId);
         itemDto.setId(itemId);
-        itemDto.setOwner(userId);
-        return itemRepository.updateItem(itemDto);
+        return itemRepository.updateItem(itemDto, userId);
     }
 
-    public Item getItem(Long itemId) {
+    public ItemDto getItem(Long itemId) {
         itemValidation.isPresent(itemId);
-        return itemRepository.getItemById(itemId);
+        return ItemMapper.toItemDto(itemRepository.getItemById(itemId));
     }
 
-    public List<Item> getUsersItems(Long userId) {
+    public List<ItemDto> getUsersItems(Long userId) {
         userValidation.isPresent(userId);
         return itemRepository.getUsersItems(userId);
 
     }
 
-    public List<Item> searchItem(String req) {
+    public List<ItemDto> searchItem(String req) {
         return itemRepository.searchItem(req);
     }
 
-    public List<Item> getAllItems() {
+    public List<ItemDto> getAllItems() {
         return itemRepository.getItems();
     }
 }

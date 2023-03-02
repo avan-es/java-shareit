@@ -19,7 +19,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item addItem (@RequestBody Item item,
+    public ItemDto addItem (@RequestBody Item item,
                          @RequestHeader (value = "X-Sharer-User-Id", required = false) Long userId) {
         if (userId == null) {
             throw new ModelValidationException(String.format("Не указан владелиц для '%s'.", item.getName()));
@@ -28,7 +28,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public Item updateItem (@RequestBody ItemDto itemDto,
+    public ItemDto updateItem (@RequestBody ItemDto itemDto,
                             @RequestHeader (value = "X-Sharer-User-Id", required = false) Long userId,
                             @PathVariable Long itemId) {
         if (userId == null) {
@@ -38,17 +38,17 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public Item getItem(@PathVariable Long itemId) {
+    public ItemDto getItem(@PathVariable Long itemId) {
         return itemService.getItem(itemId);
     }
 
     @GetMapping
-    public List<Item> getUsersItems(@RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> getUsersItems(@RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         return itemService.getUsersItems(userId);
     }
 
     @GetMapping("/search")
-    public List<Item> searchItem (@RequestParam (value = "text", required = true) @NotBlank String text) {
+    public List<ItemDto> searchItem (@RequestParam (value = "text", required = true) @NotBlank String text) {
         if (!text.isBlank()) {
             return itemService.searchItem(text);
         }
@@ -56,7 +56,7 @@ public class ItemController {
     }
 
     @GetMapping("/all")
-    public List<Item> getAllItems() {
+    public List<ItemDto> getAllItems() {
         return itemService.getAllItems();
     }
 }
