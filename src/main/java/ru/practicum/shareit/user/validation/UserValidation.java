@@ -9,7 +9,6 @@ import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.regex.Matcher;
