@@ -3,6 +3,8 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -13,7 +15,11 @@ public class UserService {
 
 
     public User addUser(User user) {
-        userValidation.userEmailValidation(user);
+        userValidation.userEmailValidation(UserMapper.toUserDto(user));
         return userRepository.addUser(user);
+    }
+
+    public List<User> getUsers() {
+        return userRepository.getAllUsers();
     }
 }
