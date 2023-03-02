@@ -10,6 +10,8 @@ public class InMemoryUserRepository implements UserRepository{
 
     private final List<User> users = new ArrayList<>();
 
+    private Long actualId = 0L;
+
     @Override
     public User addUser(User user) {
         user.setId(getId());
@@ -50,10 +52,11 @@ public class InMemoryUserRepository implements UserRepository{
     }
 
     private Long getId() {
-        Long lastId = users.stream()
+        /*Long lastId = users.stream()
                 .mapToLong(User::getId)
                 .max()
                 .orElse(0);
-        return lastId + 1;
+        return lastId + 1;*/
+        return ++actualId;
     }
 }
