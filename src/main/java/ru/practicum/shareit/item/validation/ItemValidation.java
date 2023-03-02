@@ -38,6 +38,6 @@ public class ItemValidation {
                 .anyMatch(item -> item.getId().equals(itemId))) {
             log.error(String.format("Объект с ID %s не найден.", itemId));
             throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
-        };
+        }
     }
 }

@@ -84,6 +84,6 @@ public class UserValidation {
                 .anyMatch(user -> user.getId().equals(userId))) {
             log.error(String.format("Пользователь с ID %s не существует.", userId));
             throw new NotFoundException(String.format("Пользователь с ID %d не найден.", userId));
-        };
+        }
     }
 }
