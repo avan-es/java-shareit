@@ -30,4 +30,12 @@ public class ErrorHandler {
                 "Конфликт при создании объекта.",
                 e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleForbiddenConflictException(final ForbiddenException e) {
+        return new ErrorResponse(
+                "Обновление объекта не возможно.",
+                e.getMessage());
+    }
 }
