@@ -59,4 +59,9 @@ public class ItemController {
     public List<ItemDto> getAllItems() {
         return itemService.getAllItems();
     }
+
+    @DeleteMapping("/{itemId}")
+    public void deleteItem(@PathVariable Long itemId) {
+        itemService.deleteItem(itemId);
+    }
 }
