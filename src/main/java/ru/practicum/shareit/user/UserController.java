@@ -26,5 +26,11 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @PatchMapping("/{userId}")
+    public User updateUser (@RequestBody UserDto userDto,
+                            @PathVariable Long userId) {
+        return userService.updateUser(userDto, userId);
+    }
+
 
 }
