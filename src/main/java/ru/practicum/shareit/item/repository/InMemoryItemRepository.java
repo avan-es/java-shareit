@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exeptions.ForbiddenException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component("inMemoryItemRepository")
+@Slf4j
 public class InMemoryItemRepository implements ItemRepository {
 
     private final List<Item> items = new ArrayList<>();
@@ -20,6 +22,7 @@ public class InMemoryItemRepository implements ItemRepository {
     public ItemDto addItem(Item item) {
         item.setId(getId());
         items.add(item);
+        log.info(String.format("Объект с ID %s успешно создан.", item.getId()));
         return ItemMapper.toItemDto(item);
     }
 
@@ -51,12 +54,14 @@ public class InMemoryItemRepository implements ItemRepository {
         if ((Optional.ofNullable(itemDto.getAvailable()).isPresent())){
             itemForUpdate.setAvailable(itemDto.getAvailable());
         }
+        log.info(String.format("Объект с ID %s успешно обновлён.", itemForUpdate.getId()));
         return ItemMapper.toItemDto(itemForUpdate);
     }
 
     @Override
     public void deleteItem(Long itemId) {
-
+        items.remove(getItemById(itemId));
+        log.info(String.format("Объект с ID %s успешно удалён.", itemId));
     }
 
     @Override
@@ -95,6 +100,8 @@ public class InMemoryItemRepository implements ItemRepository {
 
     private void isUserIsOwner (Item item, Long userId) {
         if(!item.getOwner().equals(userId)) {
+            log.error(String.format("Ошибка обновления. Пользователь с ID %s не является владельцем объекта '%s'.",
+                    userId, item.getName()));
             throw new ForbiddenException(String.format("Вы не являетесь владельцем объекта '%s'.", item.getName()));
         }
     }
