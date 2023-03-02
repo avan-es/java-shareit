@@ -3,9 +3,11 @@ package ru.practicum.shareit.user.repository;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component("inMemoryUserRepository")
 public class InMemoryUserRepository implements UserRepository {
@@ -15,10 +17,10 @@ public class InMemoryUserRepository implements UserRepository {
     private Long actualId = 0L;
 
     @Override
-    public User addUser(User user) {
+    public UserDto addUser(User user) {
         user.setId(getId());
         users.add(user);
-        return user;
+        return UserMapper.toUserDto(user);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User updateUser(UserDto userDto) {
+    public UserDto updateUser(UserDto userDto) {
         User userForUpdate = getUserById(userDto.getId());
         if (userDto.getName() != null) {
             if (!userDto.getName().isBlank()) {
@@ -40,7 +42,7 @@ public class InMemoryUserRepository implements UserRepository {
         if (userDto.getEmail() != null) {
             userForUpdate.setEmail(userDto.getEmail());
         }
-        return userForUpdate;
+        return UserMapper.toUserDto(userForUpdate);
     }
 
     @Override
@@ -49,8 +51,10 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return users;
+    public List<UserDto> getAllUsers() {
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     private Long getId() {

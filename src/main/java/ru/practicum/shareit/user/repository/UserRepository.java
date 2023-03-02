@@ -6,9 +6,9 @@ import ru.practicum.shareit.user.model.User;
 import java.util.List;
 
 public interface UserRepository {
-    User addUser (User user);
+    UserDto addUser (User user);
     User getUserById(Long id);
-    User updateUser(UserDto userDto);
+    UserDto updateUser(UserDto userDto);
     void deleteUser(Long id);
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 }

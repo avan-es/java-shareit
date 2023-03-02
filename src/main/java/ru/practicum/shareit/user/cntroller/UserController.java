@@ -17,23 +17,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User addUser(@Valid @RequestBody User user) {
+    public UserDto addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
     @GetMapping
-    public List<User> getUsers () {
+    public List<UserDto> getUsers () {
         return userService.getUsers();
     }
 
     @PatchMapping("/{userId}")
-    public User updateUser (@RequestBody UserDto userDto,
+    public UserDto updateUser (@RequestBody UserDto userDto,
                             @PathVariable Long userId) {
         return userService.updateUser(userDto, userId);
     }
 
     @GetMapping("/{userId}")
-    public User getUsers (@PathVariable Long userId) {
+    public UserDto getUsers (@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 

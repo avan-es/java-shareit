@@ -19,25 +19,25 @@ public class UserService {
 
 
 
-    public User addUser(User user) {
+    public UserDto addUser(User user) {
         userValidation.emailValidation(UserMapper.toUserDto(user));
         return userRepository.addUser(user);
     }
 
-    public List<User> getUsers() {
+    public List<UserDto> getUsers() {
         return userRepository.getAllUsers();
     }
 
-    public User updateUser(UserDto userDto, Long userId) {
+    public UserDto updateUser(UserDto userDto, Long userId) {
         userValidation.isPresent(userId);
         userDto.setId(userId);
         userValidation.emailIsFree(userDto);
         return userRepository.updateUser(userDto);
     }
 
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         userValidation.isPresent(userId);
-        return userRepository.getUserById(userId);
+        return UserMapper.toUserDto(userRepository.getUserById(userId));
     }
 
     public void deleteUser(Long userId) {

@@ -8,6 +8,7 @@ import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.regex.Matcher;
@@ -43,7 +44,7 @@ public class UserValidation {
                     user.getEmail()));
         } else if (!userRepository.getAllUsers().isEmpty()) {
             if (userRepository.getAllUsers().stream()
-                    .map(User::getEmail).collect(Collectors.toList())
+                    .map(UserDto::getEmail).collect(Collectors.toList())
                     .contains(user.getEmail())) {
                 throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
                         user.getEmail()));
@@ -62,7 +63,7 @@ public class UserValidation {
                 User userForUpdate = userRepository.getUserById(user.getId());
                 if (!userForUpdate.getEmail().equals(user.getEmail())) {
                     if (userRepository.getAllUsers().stream()
-                            .map(User::getEmail).collect(Collectors.toList())
+                            .map(UserDto::getEmail).collect(Collectors.toList())
                             .contains(user.getEmail())) {
                         throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
                                 user.getEmail()));
