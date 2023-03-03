@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -23,19 +22,11 @@ public class UserValidation {
     @Qualifier("inMemoryUserRepository")
     private UserRepository userRepository;
 
-    private Pattern pattern;
-    private Matcher matcher;
-    private static final String EMAIL_PATTERN =
-            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
-                    "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-    public UserValidation() {
-        this.pattern = Pattern.compile(EMAIL_PATTERN);;
-    }
+    private Pattern emailPattern = Pattern.compile( "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+            "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
     private boolean validateEmail(final String hex) {
-        matcher = pattern.matcher(hex);
-        return matcher.matches();
+        return emailPattern.matcher(hex).matches();
     }
 
 
@@ -46,7 +37,7 @@ public class UserValidation {
                     user.getEmail()));
         } else if (!userRepository.getAllUsers().isEmpty()) {
             if (userRepository.getAllUsers().stream()
-                    .map(UserDto::getEmail).collect(Collectors.toList())
+                    .map(UserDto::getEmail).collect(Collectors.toSet())
                     .contains(user.getEmail())) {
                 log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
                 throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
@@ -67,7 +58,7 @@ public class UserValidation {
                 User userForUpdate = userRepository.getUserById(user.getId());
                 if (!userForUpdate.getEmail().equals(user.getEmail())) {
                     if (userRepository.getAllUsers().stream()
-                            .map(UserDto::getEmail).collect(Collectors.toList())
+                            .map(UserDto::getEmail).collect(Collectors.toSet())
                             .contains(user.getEmail())) {
                         log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
                         throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
