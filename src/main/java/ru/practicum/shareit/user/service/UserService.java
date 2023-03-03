@@ -20,7 +20,7 @@ public class UserService {
 
 
     public UserDto addUser(User user) {
-        userValidation.emailValidation(UserMapper.toUserDto(user));
+        userValidation.emailValidationForNewUser(UserMapper.toUserDto(user));
         return userRepository.addUser(user);
     }
 
@@ -31,7 +31,7 @@ public class UserService {
     public UserDto updateUser(UserDto userDto, Long userId) {
         userValidation.isPresent(userId);
         userDto.setId(userId);
-        userValidation.emailIsFree(userDto);
+        userValidation.emailValidationForExistUser(userDto);
         return userRepository.updateUser(userDto);
     }
 

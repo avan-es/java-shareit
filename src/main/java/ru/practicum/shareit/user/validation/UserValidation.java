@@ -30,44 +30,23 @@ public class UserValidation {
     }
 
 
-    public void emailValidation(UserDto user) {
-        if (!validateEmail(user.getEmail())) {
-            log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
-            throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
-                    user.getEmail()));
-        } else if (!userRepository.getAllUsers().isEmpty()) {
-            if (userRepository.getAllUsers().stream()
-                    .map(UserDto::getEmail).collect(Collectors.toSet())
-                    .contains(user.getEmail())) {
-                log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
-                throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
-                        user.getEmail()));
-            }
+    public void emailValidationForNewUser(UserDto user) {
+        isEmailValid(user);
+        if (!userRepository.getAllUsers().isEmpty()) {
+            isEmailBuse(user);
         }
-
     }
 
-    public void emailIsFree(UserDto user) {
+    public void emailValidationForExistUser(UserDto user) {
         if (user.getEmail() != null) {
-            if (!validateEmail(user.getEmail())) {
-                log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
-                throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
-                        user.getEmail()));
-            }
+            isEmailValid(user);
             if (!userRepository.getAllUsers().isEmpty()) {
                 User userForUpdate = userRepository.getUserById(user.getId());
                 if (!userForUpdate.getEmail().equals(user.getEmail())) {
-                    if (userRepository.getAllUsers().stream()
-                            .map(UserDto::getEmail).collect(Collectors.toSet())
-                            .contains(user.getEmail())) {
-                        log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
-                        throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
-                                user.getEmail()));
-                    }
+                    isEmailBuse(user);
                 }
             }
         }
-
     }
 
     public void isPresent(Long userId) {
@@ -75,6 +54,24 @@ public class UserValidation {
                 .anyMatch(user -> user.getId().equals(userId))) {
             log.error(String.format("Пользователь с ID %s не существует.", userId));
             throw new NotFoundException(String.format("Пользователь с ID %d не найден.", userId));
+        }
+    }
+
+    private void isEmailValid(UserDto user) {
+        if (!validateEmail(user.getEmail())) {
+            log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
+            throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
+                    user.getEmail()));
+        }
+    }
+    
+    private void isEmailBuse(UserDto user) {
+        if (userRepository.getAllUsers().stream()
+                .map(UserDto::getEmail).collect(Collectors.toSet())
+                .contains(user.getEmail())) {
+            log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
+            throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
+                    user.getEmail()));
         }
     }
 }
