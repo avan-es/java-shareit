@@ -1,8 +1,8 @@
 package ru.practicum.shareit.exeptions;
 
-public class ErrorResponse {
-    String error;
-    String description;
+public final class ErrorResponse {
+    private final String error;
+    private final String description;
 
 
     public ErrorResponse(String error, String description) {
