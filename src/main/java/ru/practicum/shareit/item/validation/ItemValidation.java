@@ -34,8 +34,7 @@ public class ItemValidation {
     }
 
     public void isPresent(Long itemId) {
-        if (!itemRepository.getItems().stream()
-                .anyMatch(item -> item.getId().equals(itemId))) {
+        if (itemRepository.getItemById(itemId) == null) {
             log.error(String.format("Объект с ID %s не найден.", itemId));
             throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
         }
