@@ -24,7 +24,7 @@ public class InMemoryUserRepository implements UserRepository {
         user.setId(getId());
         users.put(user.getId(), user);
         log.info(String.format("Пользователь с ID %s успешно создан.", user.getId()));
-        return UserMapper.toUserDto(user);
+        return UserMapper.INSTANT.toUserDto(user);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class InMemoryUserRepository implements UserRepository {
             userForUpdate.setEmail(userDto.getEmail());
         }
         log.info(String.format("Пользователь с ID %s успешно обновлён.", userForUpdate.getId()));
-        return UserMapper.toUserDto(userForUpdate);
+        return UserMapper.INSTANT.toUserDto(userForUpdate);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<UserDto> getAllUsers() {
         return users.values().stream()
-                .map(UserMapper::toUserDto)
+                .map(UserMapper.INSTANT::toUserDto)
                 .collect(Collectors.toList());
     }
 

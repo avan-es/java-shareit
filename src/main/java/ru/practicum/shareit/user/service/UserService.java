@@ -17,10 +17,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserValidation userValidation;
 
-
-
     public UserDto addUser(User user) {
-        userValidation.emailValidationForNewUser(UserMapper.toUserDto(user));
+        userValidation.emailValidationForNewUser(UserMapper.INSTANT.toUserDto(user));
         return userRepository.addUser(user);
     }
 
@@ -36,7 +34,7 @@ public class UserService {
 
     public UserDto getUserById(Long userId) {
         userValidation.isPresent(userId);
-        return UserMapper.toUserDto(userRepository.getUserById(userId));
+        return UserMapper.INSTANT.toUserDto(userRepository.getUserById(userId));
     }
 
     public void deleteUser(Long userId) {
