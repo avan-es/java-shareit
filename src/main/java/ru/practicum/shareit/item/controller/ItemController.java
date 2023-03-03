@@ -20,20 +20,14 @@ public class ItemController {
 
     @PostMapping
     public ItemDto addItem(@RequestBody Item item,
-                         @RequestHeader (value = "X-Sharer-User-Id", required = false) Long userId) {
-        if (userId == null) {
-            throw new ModelValidationException(String.format("Не указан владелиц для '%s'.", item.getName()));
-        }
+                         @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         return itemService.addItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestBody ItemDto itemDto,
-                            @RequestHeader (value = "X-Sharer-User-Id", required = false) Long userId,
+                            @RequestHeader (value = "X-Sharer-User-Id") Long userId,
                             @PathVariable Long itemId) {
-        if (userId == null) {
-            throw new ModelValidationException(String.format("Не указан владелиц для '%s'.", itemDto.getName()));
-        }
         return itemService.updateItem(itemDto, itemId, userId);
     }
 
@@ -48,7 +42,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItem(@RequestParam (value = "text", required = true) @NotBlank String text) {
+    public List<ItemDto> searchItem(@RequestParam (value = "text") @NotBlank String text) {
         if (!text.isBlank()) {
             return itemService.searchItem(text);
         }
