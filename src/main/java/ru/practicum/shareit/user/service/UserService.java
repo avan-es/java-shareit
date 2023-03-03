@@ -28,9 +28,8 @@ public class UserService {
         return userRepository.getAllUsers();
     }
 
-    public UserDto updateUser(UserDto userDto, Long userId) {
-        userValidation.isPresent(userId);
-        userDto.setId(userId);
+    public UserDto updateUser(UserDto userDto) {
+        userValidation.isPresent(userDto.getId());
         userValidation.emailValidationForExistUser(userDto);
         return userRepository.updateUser(userDto);
     }
