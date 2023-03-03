@@ -7,31 +7,30 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component("inMemoryUserRepository")
 @Slf4j
 public class InMemoryUserRepository implements UserRepository {
 
-    private final List<User> users = new ArrayList<>();
+    private final Map<Long, User> users = new HashMap<>();
 
     private Long actualId = 0L;
 
     @Override
     public UserDto addUser(User user) {
         user.setId(getId());
-        users.add(user);
+        users.put(user.getId(), user);
         log.info(String.format("Пользователь с ID %s успешно создан.", user.getId()));
         return UserMapper.toUserDto(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return users.stream()
-                .filter(user -> user.getId().equals(id))
-                .findAny()
-                .orElse(null);
+        return users.get(id);
     }
 
     @Override
@@ -51,13 +50,13 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void deleteUser(Long id) {
-        users.remove(getUserById(id));
+        users.remove(id);
         log.info(String.format("Пользователь с ID %s успешно удалён.", id));
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        return users.stream()
+        return users.values().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }

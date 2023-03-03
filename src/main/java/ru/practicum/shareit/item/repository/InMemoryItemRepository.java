@@ -7,37 +7,32 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component("inMemoryItemRepository")
 @Slf4j
 public class InMemoryItemRepository implements ItemRepository {
 
-    private final List<Item> items = new ArrayList<>();
+    private final Map<Long,Item> items = new HashMap<>();
     private Long actualId = 0L;
 
     @Override
     public ItemDto addItem(Item item) {
         item.setId(getId());
-        items.add(item);
+        items.put(item.getId(), item);
         log.info(String.format("Объект с ID %s успешно создан.", item.getId()));
         return ItemMapper.toItemDto(item);
     }
 
     @Override
     public Item getItemById(Long itemId) {
-        return items.stream()
-                .filter(item -> item.getId().equals(itemId))
-                .findAny()
-                .orElse(null);
+        return items.get(itemId);
     }
 
     @Override
     public List<ItemDto> getItems() {
-        return items.stream()
+        return items.values().stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
@@ -61,13 +56,13 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public void deleteItem(Long itemId) {
-        items.remove(getItemById(itemId));
+        items.remove(itemId);
         log.info(String.format("Объект с ID %s успешно удалён.", itemId));
     }
 
     @Override
     public List<ItemDto> getUsersItems(Long userId) {
-        return items.stream()
+        return items.values().stream()
                 .filter(item -> item.getOwner().equals(userId))
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -75,12 +70,12 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public List<ItemDto> searchItem(String req) {
-        List<Item> searchByName = items.stream()
+        List<Item> searchByName = items.values().stream()
                 .filter(item -> item.getName().toLowerCase().contains(req.toLowerCase()))
                 .collect(Collectors.toList())
                 .stream().filter(item -> item.getAvailable())
                 .collect(Collectors.toList());
-        List<Item> searchByDescription = items.stream()
+        List<Item> searchByDescription = items.values().stream()
                 .filter(item -> item.getDescription().toLowerCase().contains(req.toLowerCase()))
                 .collect(Collectors.toList())
                 .stream().filter(item -> item.getAvailable())
