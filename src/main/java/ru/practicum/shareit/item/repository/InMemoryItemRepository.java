@@ -22,7 +22,7 @@ public class InMemoryItemRepository implements ItemRepository {
         item.setId(getId());
         items.put(item.getId(), item);
         log.info(String.format("Объект с ID %s успешно создан.", item.getId()));
-        return ItemMapper.toItemDto(item);
+        return ItemMapper.INSTANT.toItemDto(item);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class InMemoryItemRepository implements ItemRepository {
     @Override
     public List<ItemDto> getItems() {
         return items.values().stream()
-                .map(ItemMapper::toItemDto)
+                .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +51,7 @@ public class InMemoryItemRepository implements ItemRepository {
             itemForUpdate.setAvailable(itemDto.getAvailable());
         }
         log.info(String.format("Объект с ID %s успешно обновлён.", itemForUpdate.getId()));
-        return ItemMapper.toItemDto(itemForUpdate);
+        return ItemMapper.INSTANT.toItemDto(itemForUpdate);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class InMemoryItemRepository implements ItemRepository {
     public List<ItemDto> getUsersItems(Long userId) {
         return items.values().stream()
                 .filter(item -> item.getOwner().equals(userId))
-                .map(ItemMapper::toItemDto)
+                .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
     }
 
@@ -85,7 +85,7 @@ public class InMemoryItemRepository implements ItemRepository {
         result.addAll(searchByDescription);
         return result.stream()
                 .distinct()
-                .map(ItemMapper::toItemDto)
+                .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
 
     }

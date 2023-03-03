@@ -35,7 +35,7 @@ public class ItemService {
 
     public ItemDto getItem(Long itemId) {
         itemValidation.isPresent(itemId);
-        return ItemMapper.toItemDto(itemRepository.getItemById(itemId));
+        return ItemMapper.INSTANT.toItemDto(itemRepository.getItemById(itemId));
     }
 
     public List<ItemDto> getUsersItems(Long userId) {
