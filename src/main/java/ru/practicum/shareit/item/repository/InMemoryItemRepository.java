@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exeptions.ForbiddenException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,11 +17,11 @@ public class InMemoryItemRepository implements ItemRepository {
     private Long actualId = 0L;
 
     @Override
-    public ItemDto addItem(Item item) {
+    public Item addItem(Item item) {
         item.setId(getId());
         items.put(item.getId(), item);
         log.info(String.format("Объект с ID %s успешно создан.", item.getId()));
-        return ItemMapper.INSTANT.toItemDto(item);
+        return item;
     }
 
     @Override
@@ -31,14 +30,12 @@ public class InMemoryItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<ItemDto> getItems() {
-        return items.values().stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
+    public List<Item> getItems() {
+        return new ArrayList<>(items.values());
     }
 
     @Override
-    public ItemDto updateItem(ItemDto itemDto, Long userId) {
+    public Item updateItem(ItemDto itemDto, Long userId) {
         Item itemForUpdate = getItemById(itemDto.getId());
         isUserIsOwner(itemForUpdate, userId);
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
@@ -51,7 +48,7 @@ public class InMemoryItemRepository implements ItemRepository {
             itemForUpdate.setAvailable(itemDto.getAvailable());
         }
         log.info(String.format("Объект с ID %s успешно обновлён.", itemForUpdate.getId()));
-        return ItemMapper.INSTANT.toItemDto(itemForUpdate);
+        return itemForUpdate;
     }
 
     @Override
@@ -61,15 +58,14 @@ public class InMemoryItemRepository implements ItemRepository {
     }
 
     @Override
-    public List<ItemDto> getUsersItems(Long userId) {
+    public List<Item> getUsersItems(Long userId) {
         return items.values().stream()
                 .filter(item -> item.getOwner().equals(userId))
-                .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemDto> searchItem(String req) {
+    public List<Item> searchItem(String req) {
         List<Item> searchByName = items.values().stream()
                 .filter(item -> item.getName().toLowerCase().contains(req.toLowerCase()))
                 .collect(Collectors.toList())
@@ -85,9 +81,7 @@ public class InMemoryItemRepository implements ItemRepository {
         result.addAll(searchByDescription);
         return result.stream()
                 .distinct()
-                .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
-
     }
 
     private Long getId() {

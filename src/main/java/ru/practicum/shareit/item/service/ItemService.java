@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,14 @@ public class ItemService {
         userValidation.isPresent(userId);
         itemValidation.itemValidation(item);
         item.setOwner(userId);
-        return itemRepository.addItem(item);
+        return ItemMapper.INSTANT.toItemDto(itemRepository.addItem(item));
     }
 
     public ItemDto updateItem(ItemDto itemDto, Long itemId, Long userId) {
         userValidation.isPresent(userId);
         itemValidation.isPresent(itemId);
         itemDto.setId(itemId);
-        return itemRepository.updateItem(itemDto, userId);
+        return ItemMapper.INSTANT.toItemDto(itemRepository.updateItem(itemDto, userId));
     }
 
     public ItemDto getItem(Long itemId) {
@@ -40,16 +41,22 @@ public class ItemService {
 
     public List<ItemDto> getUsersItems(Long userId) {
         userValidation.isPresent(userId);
-        return itemRepository.getUsersItems(userId);
+        return itemRepository.getUsersItems(userId).stream()
+                .map(ItemMapper.INSTANT::toItemDto)
+                .collect(Collectors.toList());
 
     }
 
     public List<ItemDto> searchItem(String req) {
-        return itemRepository.searchItem(req);
+        return itemRepository.searchItem(req).stream()
+                .map(ItemMapper.INSTANT::toItemDto)
+                .collect(Collectors.toList());
     }
 
     public List<ItemDto> getAllItems() {
-        return itemRepository.getItems();
+        return itemRepository.getItems().stream()
+                .map(ItemMapper.INSTANT::toItemDto)
+                .collect(Collectors.toList());
     }
 
     public void deleteItem(Long itemId) {

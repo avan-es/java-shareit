@@ -4,12 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component("inMemoryUserRepository")
 @Slf4j
@@ -20,11 +19,11 @@ public class InMemoryUserRepository implements UserRepository {
     private Long actualId = 0L;
 
     @Override
-    public UserDto addUser(User user) {
+    public User addUser(User user) {
         user.setId(getId());
         users.put(user.getId(), user);
         log.info(String.format("Пользователь с ID %s успешно создан.", user.getId()));
-        return UserMapper.INSTANT.toUserDto(user);
+        return user;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
+    public User updateUser(UserDto userDto) {
         User userForUpdate = getUserById(userDto.getId());
         if (userDto.getName() != null) {
             if (!userDto.getName().isBlank()) {
@@ -44,7 +43,7 @@ public class InMemoryUserRepository implements UserRepository {
             userForUpdate.setEmail(userDto.getEmail());
         }
         log.info(String.format("Пользователь с ID %s успешно обновлён.", userForUpdate.getId()));
-        return UserMapper.INSTANT.toUserDto(userForUpdate);
+        return userForUpdate;
     }
 
     @Override
@@ -54,10 +53,8 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return users.values().stream()
-                .map(UserMapper.INSTANT::toUserDto)
-                .collect(Collectors.toList());
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
     }
 
     private Long getId() {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exeptions.ModelConflictException;
 import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -30,14 +29,14 @@ public class UserValidation {
     }
 
 
-    public void emailValidationForNewUser(UserDto user) {
+    public void emailValidationForNewUser(User user) {
         isEmailValid(user);
         if (!userRepository.getAllUsers().isEmpty()) {
             isEmailBuse(user);
         }
     }
 
-    public void emailValidationForExistUser(UserDto user) {
+    public void emailValidationForExistUser(User user) {
         if (user.getEmail() != null) {
             isEmailValid(user);
             if (!userRepository.getAllUsers().isEmpty()) {
@@ -56,7 +55,7 @@ public class UserValidation {
         }
     }
 
-    private void isEmailValid(UserDto user) {
+    private void isEmailValid(User user) {
         if (!validateEmail(user.getEmail())) {
             log.error(String.format("Пользователь не создан. Ошибка в адресе почты: %s.", user.getEmail()));
             throw new ModelValidationException(String.format("Почтовый адрес '%s' не может быть использован.",
@@ -64,9 +63,9 @@ public class UserValidation {
         }
     }
 
-    private void isEmailBuse(UserDto user) {
+    private void isEmailBuse(User user) {
         if (userRepository.getAllUsers().stream()
-                .map(UserDto::getEmail).collect(Collectors.toSet())
+                .map(User::getEmail).collect(Collectors.toSet())
                 .contains(user.getEmail())) {
             log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
             throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",

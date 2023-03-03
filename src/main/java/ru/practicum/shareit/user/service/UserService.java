@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,18 +19,20 @@ public class UserService {
     private final UserValidation userValidation;
 
     public UserDto addUser(User user) {
-        userValidation.emailValidationForNewUser(UserMapper.INSTANT.toUserDto(user));
-        return userRepository.addUser(user);
+        userValidation.emailValidationForNewUser(user);
+        return UserMapper.INSTANT.toUserDto(userRepository.addUser(user));
     }
 
     public List<UserDto> getUsers() {
-        return userRepository.getAllUsers();
+        return userRepository.getAllUsers().stream()
+                .map(UserMapper.INSTANT::toUserDto)
+                .collect(Collectors.toList());
     }
 
     public UserDto updateUser(UserDto userDto) {
         userValidation.isPresent(userDto.getId());
-        userValidation.emailValidationForExistUser(userDto);
-        return userRepository.updateUser(userDto);
+        userValidation.emailValidationForExistUser(UserMapper.INSTANT.toUser(userDto));
+        return UserMapper.INSTANT.toUserDto(userRepository.updateUser(userDto));
     }
 
     public UserDto getUserById(Long userId) {
