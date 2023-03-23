@@ -14,7 +14,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 public class ItemValidation {
 
     @Autowired
-    @Qualifier("inMemoryItemRepository")
+    @Qualifier("dbItemRepository")
     private ItemRepository itemRepository;
 
     public void itemValidation(Item item) {
@@ -34,7 +34,7 @@ public class ItemValidation {
     }
 
     public void isPresent(Long itemId) {
-        if (itemRepository.getItemById(itemId) == null) {
+        if (itemRepository.findById(itemId).isEmpty()) {
             log.error(String.format("Объект с ID %s не найден.", itemId));
             throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
         }
