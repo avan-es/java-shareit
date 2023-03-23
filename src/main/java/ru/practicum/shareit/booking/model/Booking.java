@@ -1,11 +1,14 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.booking.enums.Status;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
@@ -15,13 +18,11 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_time")
-    @NotNull
-    private LocalDate startTime;
+    @Column(name = "start_date")
+    private LocalDateTime start;
 
-    @Column(name = "end_time")
-    @NotNull
-    private LocalDate endTime;
+    @Column(name = "end_date")
+    private LocalDateTime end;
 
     @Column(name = "item_id")
     @NotNull
