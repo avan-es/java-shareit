@@ -1,66 +1,22 @@
 package ru.practicum.shareit.item.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.model.ItemMapper;
-import ru.practicum.shareit.item.validation.ItemValidation;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class ItemService {
+public interface ItemService {
+    ItemDto saveItem(Item item, Long userId);
 
-    private final ItemRepository itemRepository;
-    private final UserValidation userValidation;
-    private final ItemValidation itemValidation;
+    ItemDto updateItem(ItemDto itemDto, Long itemId, Long userId);
 
-    public ItemDto addItem(Item item, Long userId) {
-        userValidation.isPresent(userId);
-        itemValidation.itemValidation(item);
-        item.setOwner(userId);
-        return ItemMapper.INSTANT.toItemDto(itemRepository.addItem(item));
-    }
+    ItemDto getItemById(Long itemId);
 
-    public ItemDto updateItem(ItemDto itemDto, Long itemId, Long userId) {
-        userValidation.isPresent(userId);
-        itemValidation.isPresent(itemId);
-        itemDto.setId(itemId);
-        return ItemMapper.INSTANT.toItemDto(itemRepository.updateItem(itemDto, userId));
-    }
+    List<ItemDto> getUsersItems(Long userId);
 
-    public ItemDto getItem(Long itemId) {
-        itemValidation.isPresent(itemId);
-        return ItemMapper.INSTANT.toItemDto(itemRepository.getItemById(itemId));
-    }
+    List<ItemDto> getAllItems();
 
-    public List<ItemDto> getUsersItems(Long userId) {
-        userValidation.isPresent(userId);
-        return itemRepository.getUsersItems(userId).stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
+    List<ItemDto> searchItem(String text);
 
-    }
-
-    public List<ItemDto> searchItem(String req) {
-        return itemRepository.searchItem(req).stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<ItemDto> getAllItems() {
-        return itemRepository.getItems().stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
-    }
-
-    public void deleteItem(Long itemId) {
-        itemValidation.isPresent(itemId);
-        itemRepository.deleteItem(itemId);
-    }
+    void deleteItem(Long itemId, Long userId);
 }
