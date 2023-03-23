@@ -21,8 +21,7 @@ public class Item {
     @NotBlank @NotNull
     private String description;
 
-    @Column(name = "is_available")
-    @NotBlank @NotNull
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
 
     @Column(name = "owner_id")
