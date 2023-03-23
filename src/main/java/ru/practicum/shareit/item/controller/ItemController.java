@@ -19,7 +19,7 @@ public class ItemController {
     @PostMapping
     public ItemDto addItem(@RequestBody Item item,
                          @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
-        return itemService.addItem(item, userId);
+        return itemService.saveItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
@@ -31,7 +31,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getItem(@PathVariable Long itemId) {
-        return itemService.getItem(itemId);
+        return itemService.getItemById(itemId);
     }
 
     @GetMapping
@@ -53,7 +53,8 @@ public class ItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public void deleteItem(@PathVariable Long itemId) {
-        itemService.deleteItem(itemId);
+    public void deleteItem(@PathVariable Long itemId,
+                           @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+        itemService.deleteItem(itemId, userId);
     }
 }
