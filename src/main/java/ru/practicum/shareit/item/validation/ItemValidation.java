@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exeptions.BookingUnavailableException;
 import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -33,10 +34,20 @@ public class ItemValidation {
         }
     }
 
-    public void isPresent(Long itemId) {
+    public Item isPresent(Long itemId) {
         if (itemRepository.findById(itemId).isEmpty()) {
             log.error(String.format("Объект с ID %s не найден.", itemId));
             throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
         }
+        return itemRepository.getById(itemId);
+    }
+
+    public Boolean isAvailable(Long itemId) {
+        Item item = itemRepository.findById(itemId).get();
+        if (!item.getAvailable()) {
+            log.error(String.format("Объект с ID %s уже занят.", itemId));
+            throw new BookingUnavailableException(String.format("Объект с ID %s уже занят.", itemId));
+        }
+        return true;
     }
 }
