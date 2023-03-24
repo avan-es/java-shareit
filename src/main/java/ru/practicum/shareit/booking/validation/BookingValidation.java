@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exeptions.BookingUnavailableException;
+import ru.practicum.shareit.exeptions.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,6 +38,13 @@ public class BookingValidation {
             log.error("БРОНИРОВАНИЕ НЕВОЗМОЖНО: Время завершения брони не может быть раньше начала брони.");
             throw new BookingUnavailableException("Время завершения брони не может быть равным времени начала брони.");
         }
+    }
 
+    public Booking isPresent (Long bookingId){
+        if (bookingRepository.findById(bookingId).isEmpty()) {
+            log.error(String.format("Бронирование с ID %s не найдено.", bookingId));
+            throw new NotFoundException(String.format("Бронирование с ID %d не найдено.", bookingId));
+        }
+        return bookingRepository.getById(bookingId);
     }
 }
