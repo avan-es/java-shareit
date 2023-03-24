@@ -10,6 +10,8 @@ import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.validation.BookingValidation;
 import ru.practicum.shareit.exeptions.BookingUnavailableException;
+import ru.practicum.shareit.exeptions.ForbiddenException;
+import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -75,5 +77,24 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<Booking> getAllItems() {
         return bookingRepository.findAll();
+    }
+
+    @Override
+    public BookingDto getBooking(Long bookingId, Long userId) {
+        Booking booking = bookingValidation.isPresent(bookingId);
+        Item item = itemValidation.isPresent(booking.getItemId());
+        User booker = new User();
+        if (booking.getBookerId().equals(userId)) {
+            booker = userValidation.isPresent(userId);
+        } else if (item.getOwner().equals(userId)) {
+            booker = userValidation.isPresent(booking.getBookerId());
+        }
+        if ((booking.getBookerId().equals(userId)) || (item.getOwner().equals(userId))) {
+            return BookingMapper.INSTANT.toBookingDto(booking,
+                    ItemMapper.INSTANT.toItemBookingDto(item),
+                    UserMapper.INSTANT.toUserBookingDto(booker));
+        } else {
+            throw new NotFoundException("Только арендодатель и арендатор могут просматривать данное бронирование.");
+        }
     }
 }

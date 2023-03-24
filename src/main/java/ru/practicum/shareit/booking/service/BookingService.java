@@ -12,4 +12,6 @@ public interface BookingService {
     BookingDto acceptBooking(Long userId, Long bookingId, Boolean approved);
 
     List<Booking> getAllItems();
+
+    BookingDto getBooking(Long bookingId, Long userId);
 }
