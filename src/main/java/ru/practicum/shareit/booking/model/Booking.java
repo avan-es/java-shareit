@@ -1,13 +1,8 @@
 package ru.practicum.shareit.booking.model;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.shareit.booking.enums.Status;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,15 +20,15 @@ public class Booking {
     private LocalDateTime end;
 
     @Column(name = "item_id")
-    @NotNull
+//    @NotNull
     private Long itemId;
 
     @Column(name = "booker_id")
-    @NotNull
+//    @NotNull
     private Long bookerId;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Status status;
+//    @Enumerated(EnumType.STRING)
+//    @NotNull
+    private String status;
 
 }
