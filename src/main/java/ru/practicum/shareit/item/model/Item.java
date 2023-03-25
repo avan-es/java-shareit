@@ -15,10 +15,10 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank @NotNull
+ //   @NotBlank @NotNull
     private String name;
 
-    @NotBlank @NotNull
+   // @NotBlank @NotNull
     private String description;
 
     @Column(name = "is_available", nullable = false)
