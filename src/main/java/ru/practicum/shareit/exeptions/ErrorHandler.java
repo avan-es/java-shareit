@@ -46,4 +46,12 @@ public class ErrorHandler {
                 "Невозможно зарезервировать объект.",
                 e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequest(final BadRequest e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                e.getMessage());
+    }
 }
