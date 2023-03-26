@@ -6,18 +6,25 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exeptions.BadRequest;
 import ru.practicum.shareit.exeptions.ForbiddenException;
+import ru.practicum.shareit.item.comment.Comment;
+import ru.practicum.shareit.item.comment.CommentDto;
+import ru.practicum.shareit.item.comment.CommentMapper;
+import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.validation.ItemValidation;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +36,8 @@ public class ItemServiceImpl implements ItemService{
     private final UserValidation userValidation;
     private final ItemValidation itemValidation;
     private final BookingRepository bookingRepository;
+
+    private final CommentRepository commentRepository;
 
     @Override
     public ItemDto saveItem(Item item, Long userId) {
@@ -66,6 +75,7 @@ public class ItemServiceImpl implements ItemService{
         if (item.getOwner().equals(userId)){
             setBookingDates(itemDto);
         }
+        itemDto.setComments(commentRepository.getAllByItemId(itemId));
         return itemDto;
     }
 
@@ -112,6 +122,20 @@ public class ItemServiceImpl implements ItemService{
         isUserIsOwner(itemRepository.getById(itemId), userId);
         itemRepository.deleteById(itemId);
         log.info(String.format("Объект с ID %s успешно удалён.", itemId));
+    }
+
+    @Override
+    public CommentDto saveComment(CommentDto commentDto, Long itemId, Long userId) {
+        Item item = itemValidation.isPresent(itemId);
+        User user = userValidation.isPresent(userId);
+        commentDto.setAuthorName(user.getName());
+        Booking booking = bookingRepository.getBookingForComment(userId, itemId, commentDto.getCreated());
+        if (booking == null) {
+            throw new BadRequest("Вы не можете оставить отзыв на вещь, которую еще не брали.");
+        }
+        Comment comment = commentRepository.save(CommentMapper.INSTANT.toComment(commentDto, itemId, userId));
+        commentDto.setId(comment.getId());
+        return commentDto;
     }
 
     private void isUserIsOwner(Item item, Long userId) {
