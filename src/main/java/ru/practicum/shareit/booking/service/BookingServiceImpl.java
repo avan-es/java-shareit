@@ -12,11 +12,9 @@ import ru.practicum.shareit.booking.validation.BookingValidation;
 import ru.practicum.shareit.exeptions.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
-import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.validation.ItemValidation;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
-import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.time.LocalDateTime;
@@ -31,9 +29,6 @@ public class BookingServiceImpl implements BookingService{
     private final UserValidation userValidation;
     private final ItemValidation itemValidation;
     private final BookingValidation bookingValidation;
-
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
 
     @Override
     public BookingDto saveBooking(Booking booking, Long userId) {

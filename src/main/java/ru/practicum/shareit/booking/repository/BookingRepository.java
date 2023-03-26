@@ -119,8 +119,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.end_date  ASC LIMIT 1 ", nativeQuery = true)
     Booking getNextBooking (Long itemId, LocalDateTime now);
 
-   // Booking findFirstByBookerIdAndItemIdAndEndIsBefore (Long bookerId, Long itemId, LocalDateTime now);
-
     @Query(value = "select * " +
             "FROM BOOKINGS b " +
             "WHERE b.booker_id = ?1 " +

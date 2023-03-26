@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.validation;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,6 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exeptions.BookingUnavailableException;
 import ru.practicum.shareit.exeptions.NotFoundException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component("bookingValidation")
