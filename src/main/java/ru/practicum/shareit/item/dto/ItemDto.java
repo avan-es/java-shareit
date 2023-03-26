@@ -3,8 +3,11 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
+import ru.practicum.shareit.item.comment.CommentDto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -17,4 +20,5 @@ public class ItemDto {
     private LocalDateTime nextBookingDate;
     private BookingInfoDto lastBooking;
     private BookingInfoDto nextBooking;
+    private List<CommentDto> comments = new ArrayList<>();
 }
