@@ -3,6 +3,9 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.dto.BookingInfoDto;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exeptions.ForbiddenException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -11,6 +14,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.validation.ItemValidation;
 import ru.practicum.shareit.user.validation.UserValidation;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ public class ItemServiceImpl implements ItemService{
     private final ItemRepository itemRepository;
     private final UserValidation userValidation;
     private final ItemValidation itemValidation;
+    private final BookingRepository bookingRepository;
 
     @Override
     public ItemDto saveItem(Item item, Long userId) {
@@ -54,16 +59,25 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public ItemDto getItemById(Long itemId) {
+    public ItemDto getItemById(Long itemId, Long userId) {
         itemValidation.isPresent(itemId);
-        return ItemMapper.INSTANT.toItemDto(itemRepository.getById(itemId));
+        Item item = itemRepository.getById(itemId);
+        ItemDto itemDto = ItemMapper.INSTANT.toItemDto(item);
+        if (item.getOwner().equals(userId)){
+            setBookingDates(itemDto);
+        }
+        return itemDto;
     }
 
     @Override
     public List<ItemDto> getUsersItems(Long userId) {
-        return itemRepository.getAllByOwner(userId).stream()
+        List<ItemDto> items = itemRepository.getAllByOwner(userId).stream()
                 .map(ItemMapper.INSTANT::toItemDto)
                 .collect(Collectors.toList());
+        for (ItemDto item: items) {
+            setBookingDates(item);
+            }
+        return items;
     }
 
     @Override
@@ -105,6 +119,19 @@ public class ItemServiceImpl implements ItemService{
             log.error(String.format("Ошибка обновления. Пользователь с ID %s не является владельцем объекта '%s'.",
                     userId, item.getName()));
             throw new ForbiddenException(String.format("Вы не являетесь владельцем объекта '%s'.", item.getName()));
+        }
+    }
+
+    private void setBookingDates (ItemDto itemDto){
+            Booking lastBooking = bookingRepository.getLastBooking(itemDto.getId(), LocalDateTime.now());
+            if (lastBooking != null) {
+                itemDto.setLastBooking(new BookingInfoDto(lastBooking.getId(), lastBooking.getBookerId()));
+                itemDto.setLastBookingDate(lastBooking.getEnd());
+            }
+            Booking nextBooking = bookingRepository.getNextBooking(itemDto.getId(), LocalDateTime.now());
+        if (nextBooking != null) {
+            itemDto.setNextBooking(new BookingInfoDto(nextBooking.getId(), nextBooking.getBookerId()));
+            itemDto.setNextBookingDate(nextBooking.getStart());
         }
     }
 }
