@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.comment;
 public enum CommentMapper {
     INSTANT;
 
-    public CommentDto toCommentDto (Comment comment, String authorName){
+    public CommentDto toCommentDto(Comment comment, String authorName) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(commentDto.getText());
@@ -12,7 +12,7 @@ public enum CommentMapper {
         return commentDto;
     }
 
-    public Comment toComment(CommentDto commentDto, Long itemId, Long authorId){
+    public Comment toComment(CommentDto commentDto, Long itemId, Long authorId) {
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
         comment.setText(commentDto.getText());

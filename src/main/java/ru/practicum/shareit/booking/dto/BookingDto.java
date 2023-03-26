@@ -18,7 +18,7 @@ public class BookingDto {
     private ItemBookingDto item;
 
 
-    public BookingDto (Long bookingId, LocalDateTime start, LocalDateTime end, String status, Long bookerId,
+    public BookingDto(Long bookingId, LocalDateTime start, LocalDateTime end, String status, Long bookerId,
                        Long itemId, String itemName) {
         this.id = bookingId;
         this.start = start;

@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final UserValidation userValidation;
@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService{
         itemValidation.isAvailable(booking.getItemId());
         User user = userValidation.isPresent(userId);
         if (item.getOwner().equals(userId)) {
-            throw new NotFoundException("Свою вещь бронировать ненужно.") ;
+            throw new NotFoundException("Свою вещь бронировать ненужно.");
         }
         booking.setStatus(Status.WAITING.toString());
         booking.setBookerId(userId);
@@ -55,7 +55,7 @@ public class BookingServiceImpl implements BookingService{
         User booker = userValidation.isPresent(booking.getBookerId());
         Item item = itemValidation.isPresent(booking.getItemId());
         if (booking.getStatus().equals(Status.APPROVED.toString())) {
-            throw new BadRequest("Бронирование уже подтверждено.") ;
+            throw new BadRequest("Бронирование уже подтверждено.");
         }
         if (item.getOwner().equals(userId)) {
             if (approved.equals(true)) {
@@ -101,7 +101,7 @@ public class BookingServiceImpl implements BookingService{
     public List<BookingDto> getUsersBookingByState(Long userId, String state) {
         userValidation.isPresent(userId);
         LocalDateTime currentDateTime = LocalDateTime.now();
-        switch (state){
+        switch (state) {
             case "ALL":
                 return bookingRepository.userFindAll(userId);
             case "CURRENT":
@@ -122,7 +122,7 @@ public class BookingServiceImpl implements BookingService{
     public List<BookingDto> getOwnerBookingByState(Long userId, String state) {
         User booker = userValidation.isPresent(userId);
         LocalDateTime currentDateTime = LocalDateTime.now();
-        switch (state){
+        switch (state) {
             case "ALL":
                 return bookingRepository.ownerFindAll(userId);
             case "CURRENT":

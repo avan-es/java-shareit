@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         userValidation.isPresent(userId);
         return UserMapper.INSTANT.toUserDto(userRepository.getById(userId));
     }
+
     @Override
     public void deleteUser(Long userId) {
         userValidation.isPresent(userId);

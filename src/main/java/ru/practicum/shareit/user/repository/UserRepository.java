@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
 @Component("dbUserRepository")
-public interface UserRepository extends JpaRepository <User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByEmail (String email);
+    User findByEmail(String email);
 }

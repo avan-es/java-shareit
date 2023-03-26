@@ -24,13 +24,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserValidation userValidation;
@@ -72,7 +71,7 @@ public class ItemServiceImpl implements ItemService{
         itemValidation.isPresent(itemId);
         Item item = itemRepository.getById(itemId);
         ItemDto itemDto = ItemMapper.INSTANT.toItemDto(item);
-        if (item.getOwner().equals(userId)){
+        if (item.getOwner().equals(userId)) {
             setBookingDates(itemDto);
         }
         itemDto.setComments(commentRepository.getAllByItemId(itemId));
@@ -146,7 +145,7 @@ public class ItemServiceImpl implements ItemService{
         }
     }
 
-    private void setBookingDates (ItemDto itemDto){
+    private void setBookingDates(ItemDto itemDto) {
             Booking lastBooking = bookingRepository.getLastBooking(itemDto.getId(), LocalDateTime.now());
             if (lastBooking != null) {
                 itemDto.setLastBooking(new BookingInfoDto(lastBooking.getId(), lastBooking.getBookerId()));

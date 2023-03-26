@@ -13,6 +13,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
            "FROM Comment as c " +
            "JOIN User as u ON c.authorId = u.id " +
            "WHERE c.itemId = ?1")
-    List<CommentDto> getAllByItemId (Long itemId);
+    List<CommentDto> getAllByItemId(Long itemId);
 
 }

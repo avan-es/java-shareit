@@ -19,7 +19,7 @@ public class BookingValidation {
     @Qualifier("dbBookingRepository")
     private BookingRepository bookingRepository;
 
-    public void bookingValidation (Booking booking){
+    public void bookingValidation(Booking booking) {
         if (booking.getStart() == null || booking.getEnd() == null) {
             log.error("БРОНИРОВАНИЕ НЕВОЗМОЖНО: Время завершения брони не может быть раньше начала брони.");
             throw new BookingUnavailableException("Время начала и завершения брони должно быть заданно.");
@@ -38,7 +38,7 @@ public class BookingValidation {
         }
     }
 
-    public Booking isPresent (Long bookingId){
+    public Booking isPresent(Long bookingId) {
         if (bookingRepository.findById(bookingId).isEmpty()) {
             log.error(String.format("Бронирование с ID %s не найдено.", bookingId));
             throw new NotFoundException(String.format("Бронирование с ID %d не найдено.", bookingId));

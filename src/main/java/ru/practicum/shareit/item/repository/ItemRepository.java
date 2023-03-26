@@ -9,7 +9,9 @@ import java.util.List;
 @Component("dbItemRepository")
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> getAllByOwner (Long id);
-    List<Item> searchByNameContainingIgnoreCase (String name);
-    List<Item> searchByDescriptionContainingIgnoreCase (String description);
+    List<Item> getAllByOwner(Long id);
+
+    List<Item> searchByNameContainingIgnoreCase(String name);
+
+    List<Item> searchByDescriptionContainingIgnoreCase(String description);
 }

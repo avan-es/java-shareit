@@ -109,7 +109,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
         "WHERE b.ITEM_ID = ?1 " +
         "AND b.START_DATE < ?2 " +
         "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)
-    Booking getLastBooking (Long itemId, LocalDateTime now);
+    Booking getLastBooking(Long itemId, LocalDateTime now);
 
     @Query(value = "select * " +
             "FROM BOOKINGS b " +
@@ -117,7 +117,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND b.START_DATE > ?2 " +
             "AND NOT b.status = 'REJECTED' " +
             "ORDER BY b.end_date  ASC LIMIT 1 ", nativeQuery = true)
-    Booking getNextBooking (Long itemId, LocalDateTime now);
+    Booking getNextBooking(Long itemId, LocalDateTime now);
 
     @Query(value = "select * " +
             "FROM BOOKINGS b " +
@@ -125,7 +125,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND b.ITEM_ID  = ?2 " +
             "AND b.end_date < ?3 " +
             "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)
-    Booking getBookingForComment (Long bookerId, Long itemId, LocalDateTime now);
+    Booking getBookingForComment(Long bookerId, Long itemId, LocalDateTime now);
 
 
 }
