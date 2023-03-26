@@ -25,17 +25,17 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "join Item as it on bk.itemId = it.id " +
             "join User as booker on bk.bookerId = booker.id " +
             "WHERE booker.id = ?1 " +
-            "AND bk.status = ?2 " +
-            "AND bk.end > ?3" +
+            "AND bk.start < ?2 " +
+            "AND bk.end > ?3 " +
             "order by bk.start DESC ")
-    List<BookingDto> userFindAllCurrent(Long userId, String status, LocalDateTime now);
+    List<BookingDto> userFindAllCurrent(Long userId, LocalDateTime currentDateTimeStart, LocalDateTime currentDateTimeEnd);
 
     @Query("select new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "from Booking as bk " +
             "join Item as it on bk.itemId = it.id " +
             "join User as booker on bk.bookerId = booker.id " +
             "WHERE booker.id = ?1 " +
-            "AND bk.end < ?2" +
+            "AND bk.end < ?2 " +
             "order by bk.start DESC ")
     List<BookingDto> userFindAllPast(Long userId, LocalDateTime now);
 
@@ -71,17 +71,17 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "join Item as it on bk.itemId = it.id " +
             "join User as booker on bk.bookerId = booker.id " +
             "WHERE it.owner = ?1 " +
-            "AND bk.status = ?2 " +
-            "AND bk.end > ?3" +
+            "AND bk.start < ?2 " +
+            "AND bk.end > ?3 " +
             "order by bk.start DESC ")
-    List<BookingDto> ownerFindAllCurrent(Long userId, String status, LocalDateTime now);
+    List<BookingDto> ownerFindAllCurrent(Long userId, LocalDateTime currentDateTimeStart, LocalDateTime currentDateTimeEnd);
 
     @Query("select new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "from Booking as bk " +
             "join Item as it on bk.itemId = it.id " +
             "join User as booker on bk.bookerId = booker.id " +
             "WHERE it.owner = ?1 " +
-            "AND bk.end < ?2" +
+            "AND bk.end < ?2 " +
             "order by bk.start DESC ")
     List<BookingDto> ownerFindAllPast(Long userId, LocalDateTime now);
 
@@ -119,7 +119,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.end_date  ASC LIMIT 1 ", nativeQuery = true)
     Booking getNextBooking (Long itemId, LocalDateTime now);
 
+   // Booking findFirstByBookerIdAndItemIdAndEndIsBefore (Long bookerId, Long itemId, LocalDateTime now);
 
+    @Query(value = "select * " +
+            "FROM BOOKINGS b " +
+            "WHERE b.booker_id = ?1 " +
+            "AND b.ITEM_ID  = ?2 " +
+            "AND b.end_date < ?3 " +
+            "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)
+    Booking getBookingForComment (Long bookerId, Long itemId, LocalDateTime now);
 
 
 }
