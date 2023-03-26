@@ -2,10 +2,15 @@ package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exeptions.BadRequest;
+import ru.practicum.shareit.exeptions.ForbiddenException;
+import ru.practicum.shareit.item.comment.Comment;
+import ru.practicum.shareit.item.comment.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,5 +62,17 @@ public class ItemController {
     public void deleteItem(@PathVariable Long itemId,
                            @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         itemService.deleteItem(itemId, userId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComment(@PathVariable Long itemId,
+                              @RequestBody CommentDto commentDto,
+                              @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+        if (commentDto.getText().isBlank()) {
+            throw new BadRequest("Текст отзыва не может быть пустым.");
+        }
+        commentDto.setCreated(LocalDateTime.now());
+
+        return itemService.saveComment(commentDto, itemId, userId);
     }
 }
