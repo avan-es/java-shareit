@@ -105,12 +105,13 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<BookingDto> getUsersBookingByState(Long userId, String state) {
         userValidation.isPresent(userId);
+        LocalDateTime currentDateTime = LocalDateTime.now();
         switch (state){
             case "ALL":
                 return bookingRepository.userFindAll(userId);
             case "CURRENT":
-                return bookingRepository.userFindAllCurrent(userId, "APPROVED", LocalDateTime.now());
-            case "**PAST**":
+                return bookingRepository.userFindAllCurrent(userId,  currentDateTime, currentDateTime); //"APPROVED",
+            case "PAST":
                 return bookingRepository.userFindAllPast(userId, LocalDateTime.now());
             case "FUTURE":
                 return bookingRepository.userFindAllFuture(userId, LocalDateTime.now());
@@ -125,12 +126,13 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public List<BookingDto> getOwnerBookingByState(Long userId, String state) {
         User booker = userValidation.isPresent(userId);
+        LocalDateTime currentDateTime = LocalDateTime.now();
         switch (state){
             case "ALL":
                 return bookingRepository.ownerFindAll(userId);
             case "CURRENT":
-                return bookingRepository.ownerFindAllCurrent(userId, "APPROVED", LocalDateTime.now());
-            case "**PAST**":
+                return bookingRepository.ownerFindAllCurrent(userId, currentDateTime, currentDateTime);
+            case "PAST":
                 return bookingRepository.ownerFindAllPast(userId, LocalDateTime.now());
             case "FUTURE":
                 return bookingRepository.ownerFindAllFuture(userId, LocalDateTime.now());
