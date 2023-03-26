@@ -11,7 +11,7 @@ public interface UserService {
 
     UserDto saveUser(User user);
 
-    UserDto updateUser (UserDto userDto);
+    UserDto updateUser(UserDto userDto);
 
     UserDto getUserById(Long userId);
 
