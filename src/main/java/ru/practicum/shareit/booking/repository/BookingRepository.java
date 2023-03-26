@@ -108,6 +108,48 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<BookingDto> ownerFindAllWaitingOrRejected(Long userId, String status);
 
 
+    List<BookingDto> getBookingByItemIdAndEndIsBefore(Long itemId, LocalDateTime now);
+/*    @Query(value = "select * " +
+            "FROM BOOKINGS b " +
+            "WHERE b.ITEM_ID = ?1 " +
+            "AND b.START_DATE < ?2 " +
+            "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)*/
+
+/*    @Query(value = "select b.id AS bookingId, b.booker_id AS bookerId, b.start_date AS bookingDate " +
+            "FROM BOOKINGS b " +
+            "WHERE b.ITEM_ID = ?1 " +
+            "AND b.START_DATE < ?2 " +
+            "ORDER BY b.START_DATE  DESC LIMIT 1 ", nativeQuery = true)*/
+  /*  @Query(value = "select bk.ID AS id, bk.START_DATE as start, bk.END_DATE AS end, bk.STATUS AS status, booker.ID, it.ID, it.NAME " +
+            "from BOOKINGS as bk " +
+            "join Items as it on bk.ITEM_ID  = it.ID " +
+            "join Users as booker on bk.BOOKER_ID  = booker.id " +
+            "WHERE bk.ITEM_ID = ?1 " +
+            "AND bk.START_DATE < ?2 " +
+            "order by start  DESC  LIMIT 1", nativeQuery = true)*/
+@Query(value = "select * " +
+        "FROM BOOKINGS b " +
+        "WHERE b.ITEM_ID = ?1 " +
+        "AND b.START_DATE < ?2 " +
+        "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)
+    Booking getLastBooking (Long itemId, LocalDateTime now);
+
+    /*@Query(value = "select * " +
+            "FROM BOOKINGS b " +
+            "WHERE b.ITEM_ID = ?1 " +
+            "AND b.START_DATE > ?2 " +
+            "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)*/
+    /*@Query(value = "select b.id AS bookingId, b.booker_id AS bookerId, b.start_date AS bookingDate " +
+            "FROM BOOKINGS b " +
+            "WHERE b.ITEM_ID = ?1 " +
+            "AND b.START_DATE > ?2 " +
+            "ORDER BY b.START_DATE  DESC LIMIT 1 ", nativeQuery = true)*/
+    @Query(value = "select * " +
+            "FROM BOOKINGS b " +
+            "WHERE b.ITEM_ID = ?1 " +
+            "AND b.START_DATE > ?2 " +
+            "ORDER BY b.end_date  DESC LIMIT 1 ", nativeQuery = true)
+    Booking getNextBooking (Long itemId, LocalDateTime now);
 
 
 
