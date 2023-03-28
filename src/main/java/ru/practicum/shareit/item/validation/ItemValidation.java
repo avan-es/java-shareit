@@ -42,12 +42,10 @@ public class ItemValidation {
         return itemRepository.getById(itemId);
     }
 
-    public Boolean isAvailable(Long itemId) {
-        Item item = itemRepository.findById(itemId).get();
-        if (!item.getAvailable()) {
+    public void isAvailable(Long itemId) {
+        if (!itemRepository.findById(itemId).get().getAvailable()) {
             log.error(String.format("Объект с ID %s уже занят.", itemId));
             throw new BookingUnavailableException(String.format("Объект с ID %s уже занят.", itemId));
         }
-        return true;
     }
 }

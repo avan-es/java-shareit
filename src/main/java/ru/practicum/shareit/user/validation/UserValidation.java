@@ -57,9 +57,7 @@ public class UserValidation {
     }
 
     private void isEmailBuse(User user) {
-        if (userRepository.findAll().stream()
-                .map(User::getEmail).collect(Collectors.toSet())
-                .contains(user.getEmail())) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             log.error(String.format("Пользователь не создан. Почта %s уже занята.", user.getEmail()));
             throw new ModelConflictException(String.format("Почтовый адрес '%s' уже занят.",
                     user.getEmail()));

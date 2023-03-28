@@ -14,12 +14,12 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String text;
-    @Column(name = "item_id")
+    @Column(name = "item_id", nullable = false)
     private Long itemId;
-    @Column(name = "author_id")
+    @Column(name = "author_id", nullable = false)
     private Long authorId;
-
+    @Column(nullable = false)
     private LocalDateTime created;
 }
