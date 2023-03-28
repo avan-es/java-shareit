@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Component("userValidation")
 @Slf4j
