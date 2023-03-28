@@ -14,6 +14,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "content")
     private String text;
     @Column(name = "item_id")
     private Long itemId;

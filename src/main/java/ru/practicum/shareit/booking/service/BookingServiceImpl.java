@@ -82,19 +82,20 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto getBooking(Long bookingId, Long userId) {
         Booking booking = bookingValidation.isPresent(bookingId);
         Item item = itemValidation.isPresent(booking.getItemId());
-        User booker = new User();
+        /*Заполняется далее. Значение зависит от того, кто кинул запрос (пользователь или владелец).
+          Нужен далее в маппере*/
+        User user = new User();
         if (booking.getBookerId().equals(userId)) {
-            booker = userValidation.isPresent(userId);
+            user = userValidation.isPresent(userId);
         } else if (item.getOwner().equals(userId)) {
-            booker = userValidation.isPresent(booking.getBookerId());
+            user = userValidation.isPresent(booking.getBookerId());
         }
-        if ((booking.getBookerId().equals(userId)) || (item.getOwner().equals(userId))) {
-            return BookingMapper.INSTANT.toBookingDto(booking,
-                    ItemMapper.INSTANT.toItemBookingDto(item),
-                    UserMapper.INSTANT.toUserBookingDto(booker));
-        } else {
+        if (!(booking.getBookerId().equals(userId)) && !(item.getOwner().equals(userId))) {
             throw new NotFoundException("Только арендодатель и арендатор могут просматривать данное бронирование.");
         }
+        return BookingMapper.INSTANT.toBookingDto(booking,
+                ItemMapper.INSTANT.toItemBookingDto(item),
+                UserMapper.INSTANT.toUserBookingDto(user));
     }
 
     @Override
@@ -105,7 +106,7 @@ public class BookingServiceImpl implements BookingService {
             case "ALL":
                 return bookingRepository.userFindAll(userId);
             case "CURRENT":
-                return bookingRepository.userFindAllCurrent(userId,  currentDateTime, currentDateTime); //"APPROVED",
+                return bookingRepository.userFindAllCurrent(userId,  currentDateTime, currentDateTime);
             case "PAST":
                 return bookingRepository.userFindAllPast(userId, LocalDateTime.now());
             case "FUTURE":
