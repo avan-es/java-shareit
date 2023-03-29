@@ -57,17 +57,16 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getStatus().equals(Status.APPROVED.toString())) {
             throw new BadRequest("Бронирование уже подтверждено.");
         }
-        if (item.getOwner().equals(userId)) {
-            if (approved.equals(true)) {
-                booking.setStatus(Status.APPROVED.toString());
-            } else {
-                booking.setStatus(Status.REJECTED.toString());
-            }
-            bookingRepository.save(booking);
-        } else {
+        if (!item.getOwner().equals(userId)) {
             log.error("Только владелиц может подтвердить бронь.");
             throw new NotFoundException("Только владелиц может подтвердить бронь.");
         }
+        if (approved) {
+            booking.setStatus(Status.APPROVED.toString());
+        } else {
+            booking.setStatus(Status.REJECTED.toString());
+        }
+        bookingRepository.save(booking);
         return BookingMapper.INSTANT.toBookingDto(booking,
                 ItemMapper.INSTANT.toItemBookingDto(item),
                 UserMapper.INSTANT.toUserBookingDto(booker));
