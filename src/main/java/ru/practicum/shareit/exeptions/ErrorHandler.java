@@ -38,4 +38,20 @@ public class ErrorHandler {
                 "Обновление объекта не возможно.",
                 e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBookingUnavailableException(final BookingUnavailableException e) {
+        return new ErrorResponse(
+                "Невозможно зарезервировать объект.",
+                e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequest(final BadRequest e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                e.getMessage());
+    }
 }

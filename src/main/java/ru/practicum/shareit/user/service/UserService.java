@@ -1,47 +1,19 @@
 package ru.practicum.shareit.user.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.validation.UserValidation;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserMapper;
-import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
 
-    private final UserRepository userRepository;
-    private final UserValidation userValidation;
+    List<UserDto> getAllUsers();
 
-    public UserDto addUser(User user) {
-        userValidation.emailValidationForNewUser(user);
-        return UserMapper.INSTANT.toUserDto(userRepository.addUser(user));
-    }
+    UserDto saveUser(User user);
 
-    public List<UserDto> getUsers() {
-        return userRepository.getAllUsers().stream()
-                .map(UserMapper.INSTANT::toUserDto)
-                .collect(Collectors.toList());
-    }
+    UserDto updateUser(UserDto userDto);
 
-    public UserDto updateUser(UserDto userDto) {
-        userValidation.isPresent(userDto.getId());
-        userValidation.emailValidationForExistUser(UserMapper.INSTANT.toUser(userDto));
-        return UserMapper.INSTANT.toUserDto(userRepository.updateUser(userDto));
-    }
+    UserDto getUserById(Long userId);
 
-    public UserDto getUserById(Long userId) {
-        userValidation.isPresent(userId);
-        return UserMapper.INSTANT.toUserDto(userRepository.getUserById(userId));
-    }
-
-    public void deleteUser(Long userId) {
-        userValidation.isPresent(userId);
-        userRepository.deleteUser(userId);
-    }
+    void deleteUser(Long userId);
 }
