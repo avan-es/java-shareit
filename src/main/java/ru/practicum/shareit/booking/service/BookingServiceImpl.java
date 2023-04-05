@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequest("Бронирование уже подтверждено.");
         }
         if (!item.getOwner().equals(userId)) {
-            log.error("Только владелиц может подтвердить бронь.");
+            log.error("Только владелец может подтвердить бронь.");
             throw new NotFoundException("Только владелиц может подтвердить бронь.");
         }
         if (approved) {
