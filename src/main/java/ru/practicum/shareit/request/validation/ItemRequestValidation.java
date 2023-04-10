@@ -9,9 +9,9 @@ import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 
-@Component("requestValidation")
+@Component("itemRequestValidation")
 @Slf4j
-public class RequestValidation {
+public class ItemRequestValidation {
     @Autowired
     @Qualifier("dbItemRequestRepository")
     private ItemRequestRepository requestRepository;

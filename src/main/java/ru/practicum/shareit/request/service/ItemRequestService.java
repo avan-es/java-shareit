@@ -14,4 +14,6 @@ public interface ItemRequestService {
     List<ItemRequestDto> findRequestsByOwnerId(Long ownerId);
 
     List<ItemRequestDto> findAll(Long ownerId, Pageable pageable);
+
+    ItemRequestDto getRequestById(Long userId, Long requestId);
 }
