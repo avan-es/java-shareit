@@ -13,6 +13,7 @@ public enum ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
+        itemDto.setRequestId(item.getRequestId());
         return itemDto;
     }
 

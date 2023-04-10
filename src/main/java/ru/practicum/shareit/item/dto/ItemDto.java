@@ -20,5 +20,6 @@ public class ItemDto {
     private LocalDateTime nextBookingDate;
     private BookingInfoDto lastBooking;
     private BookingInfoDto nextBooking;
+    private Long requestId;
     private List<CommentDto> comments = new ArrayList<>();
 }
