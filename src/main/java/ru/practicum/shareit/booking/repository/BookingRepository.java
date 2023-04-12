@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,25 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "JOIN User AS booker ON bk.bookerId = booker.id " +
             "WHERE booker.id = ?1 " +
             "ORDER BY bk.start DESC ")
+    Slice<BookingDto> userFindAll(Long userId, Pageable pageable);
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE booker.id = ?1 " +
+            "ORDER BY bk.start DESC ")
     List<BookingDto> userFindAll(Long userId);
+
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE booker.id = ?1 " +
+            "AND bk.start < ?2 " +
+            "AND bk.end > ?3 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> userFindAllCurrent(Long userId, LocalDateTime currentDateTimeStart, LocalDateTime currentDateTimeEnd, Pageable pageable);
 
     @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "FROM Booking AS bk " +
@@ -37,7 +57,26 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE booker.id = ?1 " +
             "AND bk.end < ?2 " +
             "ORDER BY bk.start DESC ")
+    Slice<BookingDto> userFindAllPast(Long userId, LocalDateTime now, Pageable pageable);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE booker.id = ?1 " +
+            "AND bk.end < ?2 " +
+            "ORDER BY bk.start DESC ")
     List<BookingDto> userFindAllPast(Long userId, LocalDateTime now);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE booker.id = ?1 " +
+            "AND bk.status IN ('WAITING','APPROVED') " +
+            "AND bk.end > ?2 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> userFindAllFuture(Long userId, LocalDateTime now, Pageable pageable);
 
     @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "FROM Booking AS bk " +
@@ -56,7 +95,24 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE booker.id = ?1 " +
             "AND bk.status = ?2 " +
             "ORDER BY bk.start DESC ")
+    Slice<BookingDto> userFindAllWaitingOrRejected(Long userId, String status, Pageable pageable);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE booker.id = ?1 " +
+            "AND bk.status = ?2 " +
+            "ORDER BY bk.start DESC ")
     List<BookingDto> userFindAllWaitingOrRejected(Long userId, String status);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE it.owner = ?1 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> ownerFindAll(Long userId, Pageable pageable);
 
     @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "FROM Booking AS bk " +
@@ -75,6 +131,25 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND bk.end > ?3 " +
             "ORDER BY bk.start DESC ")
     List<BookingDto> ownerFindAllCurrent(Long userId, LocalDateTime currentDateTimeStart, LocalDateTime currentDateTimeEnd);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE it.owner = ?1 " +
+            "AND bk.start < ?2 " +
+            "AND bk.end > ?3 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> ownerFindAllCurrent(Long userId, LocalDateTime currentDateTimeStart, LocalDateTime currentDateTimeEnd, Pageable pageable);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE it.owner = ?1 " +
+            "AND bk.end < ?2 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> ownerFindAllPast(Long userId, LocalDateTime now, Pageable pageable);
 
     @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
             "FROM Booking AS bk " +
@@ -100,9 +175,28 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "JOIN Item AS it ON bk.itemId = it.id " +
             "JOIN User AS booker ON bk.bookerId = booker.id " +
             "WHERE it.owner = ?1 " +
+            "AND bk.status IN ('WAITING','APPROVED') " +
+            "AND bk.end > ?2 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> ownerFindAllFuture(Long userId, LocalDateTime now, Pageable pageable);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE it.owner = ?1 " +
             "AND bk.status = ?2 " +
             "ORDER BY bk.start DESC ")
     List<BookingDto> ownerFindAllWaitingOrRejected(Long userId, String status);
+
+    @Query("SELECT new ru.practicum.shareit.booking.dto.BookingDto(bk.id, bk.start, bk.end, bk.status, booker.id, it.id, it.name) " +
+            "FROM Booking AS bk " +
+            "JOIN Item AS it ON bk.itemId = it.id " +
+            "JOIN User AS booker ON bk.bookerId = booker.id " +
+            "WHERE it.owner = ?1 " +
+            "AND bk.status = ?2 " +
+            "ORDER BY bk.start DESC ")
+    Slice<BookingDto> ownerFindAllWaitingOrRejected(Long userId, String status, Pageable pageable);
 
     @Query(value = "SELECT * " +
         "FROM Bookings b " +
