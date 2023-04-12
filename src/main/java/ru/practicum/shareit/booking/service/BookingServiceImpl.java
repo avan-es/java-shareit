@@ -108,8 +108,7 @@ public class BookingServiceImpl implements BookingService {
             throw new BadRequest(String.format("Unknown state: %s", state));
         }
         userValidation.isPresent(userId);
-        Slice<BookingDto> bookingDtoSlice;
-        bookingDtoSlice = getSliceOfBookingDto(userId, state, pageable, isOwner);
+        Slice<BookingDto> bookingDtoSlice = getSliceOfBookingDto(userId, state, pageable, isOwner);
         while (!bookingDtoSlice.hasContent() && bookingDtoSlice.getNumber() > 0) {
             bookingDtoSlice = getSliceOfBookingDto(userId, state, PageRequest.of(bookingDtoSlice.getNumber()-1, bookingDtoSlice.getSize()), isOwner);
         }

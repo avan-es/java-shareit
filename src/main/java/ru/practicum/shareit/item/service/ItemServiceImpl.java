@@ -2,6 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingInfoDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -79,14 +82,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getUsersItems(Long userId) {
-        List<ItemDto> items = itemRepository.getAllByOwner(userId).stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
-        for (ItemDto item: items) {
-            setBookingDates(item);
-            }
-        return items;
+    public List<ItemDto> getUsersItems(Long userId, Pageable pageable) {
+        userValidation.isPresent(userId);
+        Slice<Item> itemSlice = itemRepository.getAllByOwner(userId, pageable);
+        while (!itemSlice.hasContent() && itemSlice.getNumber() > 0) {
+            itemSlice = itemRepository.getAllByOwner(userId, PageRequest.of(itemSlice.getNumber() - 1, itemSlice.getSize()));
+        }
+        List<ItemDto> result = new ArrayList<>();
+        ItemDto itemDto = new ItemDto();
+        for (Item item : itemSlice) {
+            itemDto = ItemMapper.INSTANT.toItemDto(item);
+            setBookingDates(itemDto);
+            result.add(itemDto);
+        }
+        return result;
     }
 
     @Override
@@ -97,22 +106,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItem(String text) {
-        List<Item> searchByName = itemRepository.searchByNameContainingIgnoreCase(text).stream()
-                .filter(Item::getAvailable)
-                .collect(Collectors.toList());
-        List<Item> searchByDescription = itemRepository.searchByDescriptionContainingIgnoreCase(text).stream()
-                .filter(Item::getAvailable)
-                .collect(Collectors.toList());
-        List<Item> result = new ArrayList<>();
-        result.addAll(searchByName);
-        result.addAll(searchByDescription);
-        return result.stream()
-                .distinct()
-                .collect(Collectors.toList())
-                .stream()
-                .map(ItemMapper.INSTANT::toItemDto)
-                .collect(Collectors.toList());
+    public List<ItemDto> searchItem(String text, Pageable pageable) {
+        Slice <Item> itemSlice = itemRepository.searchByNameOrDescriptionContainingIgnoreCase(text, text, pageable);
+        while(!itemSlice.hasContent() && itemSlice.getNumber() > 0) {
+            itemSlice = itemRepository.searchByNameOrDescriptionContainingIgnoreCase(text, text, PageRequest.of(itemSlice.getNumber() - 1, itemSlice.getSize()));
+        }
+        List<ItemDto> result = new ArrayList<>();
+        ItemDto itemDto = new ItemDto();
+        for (Item item : itemSlice) {
+            itemDto = ItemMapper.INSTANT.toItemDto(item);
+            setBookingDates(itemDto);
+            if(itemDto.getAvailable()) {
+                result.add(itemDto);
+            }
+        }
+        return result;
     }
 
     @Override

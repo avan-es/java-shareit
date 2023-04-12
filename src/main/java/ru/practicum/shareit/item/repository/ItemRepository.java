@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.repository;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
@@ -10,11 +11,12 @@ import java.util.List;
 @Component("dbItemRepository")
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> getAllByOwner(Long id);
+    Slice<Item> getAllByOwner(Long id, Pageable pageable);
 
-    List<Item> searchByNameContainingIgnoreCase(String name);
+    Slice<Item> searchByNameOrDescriptionContainingIgnoreCase(String name, String description, Pageable page);
 
-    List<Item> searchByDescriptionContainingIgnoreCase(String description);
+    //List<Item> searchByDescriptionContainingIgnoreCaseOrDe(String description);
+    //List<Item> searchByNameAndDescriptionContainingIgnoreCase
 
     List<Item> findAllByRequestId (Long requestId, Pageable page);
     List<Item> findAllByRequestId (Long requestId);

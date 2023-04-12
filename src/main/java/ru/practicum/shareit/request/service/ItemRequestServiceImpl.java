@@ -2,7 +2,9 @@ package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -13,6 +15,7 @@ import ru.practicum.shareit.request.validation.ItemRequestValidation;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,12 +56,16 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestDto> findAll(Long ownerId, Pageable pageable) {
 
         userValidation.isPresent(ownerId);
-        List<ItemRequestDto> result = itemRequestRepository.findAllByRequesterIdNot(ownerId, pageable)
-                .stream()
-                .map(ItemRequestMapper.INSTANT::toItemRequestDto)
-                .collect(Collectors.toList());
-        for (ItemRequestDto request: result) {
-            request.setItems(itemRepository.findAllByRequestId(request.getId()));
+        Slice<ItemRequest> requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId, pageable);
+        while(!requestSlice.hasContent() && requestSlice.getNumber() > 0) {
+            requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId, PageRequest.of(requestSlice.getNumber() - 1, requestSlice.getSize()));
+        }
+        List<ItemRequestDto> result = new ArrayList<>();
+        ItemRequestDto itemRequestDto = new ItemRequestDto();
+        for (ItemRequest itemRequest: requestSlice) {
+            itemRequestDto = ItemRequestMapper.INSTANT.toItemRequestDto(itemRequest);
+            itemRequestDto.setItems(itemRepository.findAllByRequestId(itemRequestDto.getId()));
+            result.add(itemRequestDto);
         }
         return result;
     }
