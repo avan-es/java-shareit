@@ -58,7 +58,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         userValidation.isPresent(ownerId);
         Slice<ItemRequest> requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId, pageable);
         while(!requestSlice.hasContent() && requestSlice.getNumber() > 0) {
-            requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId, PageRequest.of(requestSlice.getNumber() - 1, requestSlice.getSize()));
+            requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId,
+                    PageRequest.of(requestSlice.getNumber() - 1, requestSlice.getSize()));
         }
         List<ItemRequestDto> result = new ArrayList<>();
         ItemRequestDto itemRequestDto = new ItemRequestDto();

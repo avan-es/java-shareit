@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
+        log.info("Получен список пользователей.");
         return userRepository.findAll().stream()
                 .map(UserMapper.INSTANT::toUserDto)
                 .collect(Collectors.toList());
