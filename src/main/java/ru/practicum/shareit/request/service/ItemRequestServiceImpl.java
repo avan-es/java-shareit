@@ -52,12 +52,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         }
         return requests;
     }
+
     @Override
     public List<ItemRequestDto> findAll(Long ownerId, Pageable pageable) {
 
         userValidation.isPresent(ownerId);
         Slice<ItemRequest> requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId, pageable);
-        while(!requestSlice.hasContent() && requestSlice.getNumber() > 0) {
+        while (!requestSlice.hasContent() && requestSlice.getNumber() > 0) {
             requestSlice = itemRequestRepository.findAllByRequesterIdNot(ownerId,
                     PageRequest.of(requestSlice.getNumber() - 1, requestSlice.getSize()));
         }

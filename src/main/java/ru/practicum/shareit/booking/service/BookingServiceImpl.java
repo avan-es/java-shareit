@@ -110,7 +110,7 @@ public class BookingServiceImpl implements BookingService {
         userValidation.isPresent(userId);
         Slice<BookingDto> bookingDtoSlice = getSliceOfBookingDto(userId, state, pageable, isOwner);
         while (!bookingDtoSlice.hasContent() && bookingDtoSlice.getNumber() > 0) {
-            bookingDtoSlice = getSliceOfBookingDto(userId, state, PageRequest.of(bookingDtoSlice.getNumber()-1, bookingDtoSlice.getSize()), isOwner);
+            bookingDtoSlice = getSliceOfBookingDto(userId, state, PageRequest.of(bookingDtoSlice.getNumber() - 1, bookingDtoSlice.getSize()), isOwner);
         }
         return bookingDtoSlice.toList();
     }

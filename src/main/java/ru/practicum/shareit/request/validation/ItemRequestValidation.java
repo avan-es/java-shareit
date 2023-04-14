@@ -23,7 +23,7 @@ public class ItemRequestValidation {
         }
     }
 
-    public ItemRequest isPresent(Long requestId){
+    public ItemRequest isPresent(Long requestId) {
         if (requestRepository.findById(requestId).isEmpty()) {
             log.error(String.format("Запрос с ID %s не найден.", requestId));
             throw new NotFoundException(String.format("Запрос с ID %d не найден.", requestId));

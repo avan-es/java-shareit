@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request.service;
 
-import net.bytebuddy.pool.TypePool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
@@ -25,7 +23,6 @@ import ru.practicum.shareit.user.validation.UserValidation;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +64,7 @@ class ItemRequestServiceImplTest {
 
 
     @BeforeEach
-    void setUp () {
+    void setUp() {
         itemRequest.setRequesterId(userId);
         itemRequest.setCreated(LocalDateTime.now());
         itemRequest.setDescription("Test item");
@@ -133,7 +130,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void findAll() throws Exception{
+    void findAll() throws Exception {
 
         when(itemRequestRepository.findAllByRequesterIdNot(userId, pageRequest))
                 .thenReturn(null);

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +41,7 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ItemRequestDto getRequestById(@RequestHeader(value = "X-Sharer-User-Id") @Positive Long userId,
-                                         @PathVariable @Positive Long requestId){
+                                         @PathVariable @Positive Long requestId) {
         return requestService.getRequestById(userId, requestId);
     }
 

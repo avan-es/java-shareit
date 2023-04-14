@@ -18,7 +18,6 @@ import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -53,7 +52,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsers_whenUsersAdded_thenListOfUsers() {
         List<User> users = new ArrayList<>();
-        for (int i = 0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             User user = new User();
             user.setId(((long) i));
             user.setName("User" + i);
@@ -243,7 +242,8 @@ class UserServiceImplTest {
                 .when(userValidation).emailValidationForExistUser(userToSave);
 
         assertThrows(ModelConflictException.class,
-                () -> {userService.updateUser(UserMapper.INSTANT.toUserDto(userToSave));});
+                () -> {
+            userService.updateUser(UserMapper.INSTANT.toUserDto(userToSave)); });
 
         verify(userRepository, never()).save(userToSave);
     }

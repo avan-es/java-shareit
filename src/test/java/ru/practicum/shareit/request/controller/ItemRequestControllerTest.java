@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
-import ru.practicum.shareit.user.cntroller.UserController;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ class ItemRequestControllerTest {
 
 
     @Test
-    void addRequest() throws  Exception{
+    void addRequest() throws  Exception {
         when(requestService.saveRequest(itemRequest, userId)).thenReturn(itemRequestDto);
         String result = mockMvc.perform(post("/requests", itemRequest, userId)
                         .header("X-Sharer-User-Id", userId)
@@ -62,7 +61,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getUserRequests() throws Exception{
+    void getUserRequests() throws Exception {
         when(requestService.findRequestsByOwnerId(userId)).thenReturn(itemRequestDtoList);
 
         mockMvc.perform(get("/requests")
@@ -73,7 +72,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllRequests() throws Exception{
+    void getAllRequests() throws Exception {
         when(requestService.findAll(userId, pageRequest)).thenReturn(itemRequestDtoList);
 
         mockMvc.perform(get("/requests/all")
@@ -86,7 +85,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getRequestById() throws Exception{
+    void getRequestById() throws Exception {
         when(requestService.getRequestById(userId, itemRequestId)).thenReturn(itemRequestDto);
 
         mockMvc.perform(get("/requests/{requestId}", itemRequestId, userId)

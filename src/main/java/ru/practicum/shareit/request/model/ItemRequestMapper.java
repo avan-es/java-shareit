@@ -9,7 +9,7 @@ import java.util.List;
 public enum ItemRequestMapper {
     INSTANT;
 
-    public ItemRequestDto toItemRequestDto(ItemRequest itemRequest){
+    public ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setId(itemRequest.getId());
         itemRequestDto.setDescription(itemRequest.getDescription());
@@ -18,7 +18,7 @@ public enum ItemRequestMapper {
         return itemRequestDto;
     }
 
-    public ItemRequest toItemRequest (ItemRequestDto itemRequestDto){
+    public ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setId(itemRequestDto.getId());
         itemRequest.setDescription(itemRequestDto.getDescription());

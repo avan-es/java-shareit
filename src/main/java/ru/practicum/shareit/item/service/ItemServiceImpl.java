@@ -107,8 +107,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItem(String text, Pageable pageable) {
-        Slice <Item> itemSlice = itemRepository.searchByNameOrDescriptionContainingIgnoreCase(text, text, pageable);
-        while(!itemSlice.hasContent() && itemSlice.getNumber() > 0) {
+        Slice<Item> itemSlice = itemRepository.searchByNameOrDescriptionContainingIgnoreCase(text, text, pageable);
+        while (!itemSlice.hasContent() && itemSlice.getNumber() > 0) {
             itemSlice = itemRepository.searchByNameOrDescriptionContainingIgnoreCase(text, text, PageRequest.of(itemSlice.getNumber() - 1, itemSlice.getSize()));
         }
         List<ItemDto> result = new ArrayList<>();
@@ -116,7 +116,7 @@ public class ItemServiceImpl implements ItemService {
         for (Item item : itemSlice) {
             itemDto = ItemMapper.INSTANT.toItemDto(item);
             setBookingDates(itemDto);
-            if(itemDto.getAvailable()) {
+            if (itemDto.getAvailable()) {
                 result.add(itemDto);
             }
         }
