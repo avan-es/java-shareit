@@ -43,7 +43,7 @@ class UserServiceImplTest {
         when(userRepository.findAll())
                 .thenReturn(new ArrayList<User>());
 
-        List<User> emptyListOfUsers = userRepository.findAll();
+        List<UserDto> emptyListOfUsers = userService.getAllUsers();
 
         verify(userRepository, times(1)).findAll();
         assertEquals(emptyListOfUsers.size(), 0);
@@ -251,11 +251,21 @@ class UserServiceImplTest {
     @Test
     void getUserById_whenUserFound_thenReturnUser() {
         Long userId = 0L;
-        User exceptedUser = new User();
-        when(userRepository.getById(userId))
-                .thenReturn(exceptedUser);
+        UserDto exceptedUser = new UserDto();
+        exceptedUser.setId(userId);
+        exceptedUser.setName("Name");
+        exceptedUser.setEmail("user@mail.ru");
 
-        User actualUser = userRepository.getById(userId);
+        User user = new User();
+        user.setId(userId);
+        user.setName("Name");
+        user.setEmail("user@mail.ru");
+
+
+        when(userValidation.isPresent(any()))
+                .thenReturn(user);
+
+        UserDto actualUser = userService.getUserById(userId);
         assertEquals(exceptedUser, actualUser);
     }
 
