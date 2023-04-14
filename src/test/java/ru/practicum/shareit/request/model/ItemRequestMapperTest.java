@@ -1,0 +1,57 @@
+package ru.practicum.shareit.request.model;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.booking.dto.BookingInfoDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ItemRequestMapperTest {
+
+    private ItemRequest itemRequest = new ItemRequest();
+
+    private List<ItemDto> itemDtos = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+        itemRequest.setId(0L);
+        itemRequest.setRequesterId(1L);
+        itemRequest.setCreated(LocalDateTime.now());
+        itemRequest.setDescription("Item Request");
+
+        for (int i = 0; i < 5; i++) {
+            ItemDto itemDto = new ItemDto();
+            itemDto.setId((long) i);
+            itemDto.setName("ItemDto " + i);
+            itemDto.setRequestId((long) i);
+            itemDto.setAvailable(true);
+            itemDto.setDescription("Description " + i);
+            itemDto.setLastBooking(new BookingInfoDto((long) i, (long) i));
+            itemDto.setNextBooking(new BookingInfoDto((long) i + 1, (long) i + 1));
+            itemDto.setLastBookingDate(LocalDateTime.now());
+            itemDto.setNextBookingDate(LocalDateTime.now().plusDays(1));
+            itemDto.setComments(new ArrayList<>());
+
+            itemDtos.add(itemDto);
+        }
+    }
+
+    @Test
+    void toItemRequestDto() {
+        ItemRequestDto itemRequestDto = ItemRequestMapper.INSTANT.toItemRequestDto(itemRequest);
+
+        assertAll(
+                () -> assertEquals(itemRequestDto.getId(), itemRequest.getId()),
+                () -> assertEquals(itemRequestDto.getCreated(), itemRequest.getCreated()),
+                () -> assertEquals(itemRequestDto.getRequestorId(), itemRequest.getRequesterId()),
+                () -> assertEquals(itemRequestDto.getDescription(), itemRequest.getDescription())
+        );
+    }
+
+}
