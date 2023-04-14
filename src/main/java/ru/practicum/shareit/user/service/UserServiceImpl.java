@@ -52,8 +52,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        userValidation.isPresent(userId);
-        return UserMapper.INSTANT.toUserDto(userRepository.getById(userId));
+        User user = userValidation.isPresent(userId);
+        UserDto userDto = UserMapper.INSTANT.toUserDto(user);
+        return userDto;
     }
 
     @Override
