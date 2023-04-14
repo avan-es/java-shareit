@@ -54,7 +54,7 @@ class BookingControllerTest {
 
     private Long bookingId = 0L;
 
-    private Booking booking= new Booking();
+    private Booking booking = new Booking();
     private BookingDto bookingDto = new BookingDto();
 
     private ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
@@ -118,7 +118,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllBooking() throws Exception{
+    void getAllBooking() throws Exception {
         List<Booking> bookingDtos = List.of();
         when(bookingService.getAllItems()).thenReturn(bookingDtos);
 
@@ -130,7 +130,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getAllUsersBookings() throws Exception{
+    void getAllUsersBookings() throws Exception {
         List<BookingDto> bookingDtos = List.of();
         when(userService.getUserById(bookerId)).thenReturn(userDto);
         when(bookingService.getBookingByState(bookerId, BookingState.REJECTED.toString(), pageRequest, false)).thenReturn(bookingDtos);
