@@ -6,9 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import ru.practicum.shareit.exeptions.ModelValidationException;
 import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -133,7 +131,7 @@ class ItemRequestServiceImplTest {
     void findAll() throws Exception {
 
         when(itemRequestRepository.findAllByRequesterIdNot(userId, pageRequest))
-                .thenReturn(null);
+                .thenReturn(Page.empty());
 
         Slice<ItemRequest> itemRequests = itemRequestRepository.findAllByRequesterIdNot(userId, pageRequest);
 
