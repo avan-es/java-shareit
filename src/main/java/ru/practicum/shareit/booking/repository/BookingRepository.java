@@ -129,4 +129,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Booking getBookingForComment(Long bookerId, Long itemId, LocalDateTime now);
 
 
+    Booking getBookingById(Long bookingId);
 }

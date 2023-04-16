@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
         itemValidation.isPresent(itemId);
         userValidation.isPresent(userId);
         itemDto.setId(itemId);
-        Item itemForUpdate = itemRepository.getById(itemId);
+        Item itemForUpdate = itemRepository.getItemById(itemId);
         isUserIsOwner(itemForUpdate, userId);
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             itemForUpdate.setName(itemDto.getName());
@@ -72,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto getItemById(Long itemId, Long userId) {
         itemValidation.isPresent(itemId);
-        Item item = itemRepository.getById(itemId);
+        Item item = itemRepository.getItemById(itemId);
         ItemDto itemDto = ItemMapper.INSTANT.toItemDto(item);
         if (item.getOwner().equals(userId)) {
             setBookingDates(itemDto);
@@ -126,7 +126,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItem(Long itemId, Long userId) {
         itemValidation.isPresent(itemId);
-        isUserIsOwner(itemRepository.getById(itemId), userId);
+        isUserIsOwner(itemRepository.getItemById(itemId), userId);
         itemRepository.deleteById(itemId);
         log.info(String.format("Объект с ID %s успешно удалён.", itemId));
     }
