@@ -79,7 +79,7 @@ class ItemServiceImplTest {
 
 
     @BeforeEach
-    void add() {
+    void setUp() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "bookings", "comments", "items", "requests", "users");
 
         itemsByUser1.clear();

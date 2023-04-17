@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.BookingState;
 import ru.practicum.shareit.booking.enums.BookingStatus;
@@ -53,6 +54,7 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    @Transactional
     @Override
     public BookingDto acceptBooking(Long userId, Long bookingId, Boolean approved) {
         Booking booking = bookingValidation.isPresent(bookingId);
@@ -82,6 +84,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findAll();
     }
 
+    @Transactional
     @Override
     public BookingDto getBooking(Long bookingId, Long userId) {
         Booking booking = bookingValidation.isPresent(bookingId);
