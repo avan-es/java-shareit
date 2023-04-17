@@ -1,149 +1,155 @@
 package ru.practicum.shareit.request.service;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import ru.practicum.shareit.exeptions.ModelValidationException;
-import ru.practicum.shareit.exeptions.NotFoundException;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemRequestMapper;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.request.validation.ItemRequestValidation;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserMapper;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemRequestServiceImplTest {
 
-    @InjectMocks
-    private ItemRequestServiceImpl itemRequestService;
-
-    @Mock
+    @Autowired
     private ItemRequestRepository itemRequestRepository;
 
-    @Mock
+    @Autowired
+    private ItemRequestService itemRequestService;
+
+    @Autowired
     private ItemRepository itemRepository;
 
-    @Mock
+    @Autowired
     private UserValidation userValidation;
 
-    @Mock
+    @Autowired
     private ItemRequestValidation itemRequestValidation;
 
-    private ItemRequest itemRequest = new ItemRequest();
+    @Autowired
+    private UserRepository userRepository;
 
-    private ItemRequestDto itemRequestDto = new ItemRequestDto();
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    private Long userId = 0L;
+    User user1;
+    Long user1Id;
+    UserDto user1Dto;
 
-    private Long iteRequestId = 0L;
+    User user2;
+    Long user2Id;
+    UserDto user2Dto;
 
+    ItemRequest itemRequest1ByUser1;
+    Long itemRequest1IdByUser1;
+    ItemRequestDto itemRequest1ByUser1Dto;
+    List<ItemRequestDto> itemsRequestsByUser1 = new ArrayList<>();
 
-    private PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"));
-
-    private List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
-
-
-    private Slice<ItemRequestDto> itemRequestDtoSlice;
-
+    PageRequest pageRequest = PageRequest.of(0, 10);
 
     @BeforeEach
-    void setUp() {
-        itemRequest.setRequesterId(userId);
-        itemRequest.setCreated(LocalDateTime.now());
-        itemRequest.setDescription("Test item");
-        itemRequest.setId((Long) 0L);
+    void add() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "bookings", "comments", "items", "requests", "users");
 
-        itemRequestDto = ItemRequestMapper.INSTANT.toItemRequestDto(itemRequest);
-        itemRequestDto.setItems(new ArrayList<Item>());
+        itemsRequestsByUser1.clear();
 
-        itemRequestDtoList.add(itemRequestDto);
+        //Добавляем пользователей
+        user1 = new User();
+        user1.setName("User1");
+        user1.setEmail("user1@mail.ru");
+        userRepository.save(user1);
+        user1Id = userRepository.findAll().get(0).getId();
+        user1.setId(user1Id);
+
+        user2 = new User();
+        user2.setName("User2");
+        user2.setEmail("user2@mail.ru");
+        userRepository.save(user2);
+        user2Id = userRepository.findAll().get(1).getId();
+        user2.setId(user2Id);
+
+        //Создать UserDto
+        user1Dto = new UserDto();
+        user1Dto = UserMapper.INSTANT.toUserDto(user1);
+
+        user2Dto = new UserDto();
+        user2Dto = UserMapper.INSTANT.toUserDto(user2);
+
+        //Добавляем ItemRequest
+        itemRequest1ByUser1 = new ItemRequest();
+        itemRequest1ByUser1.setRequesterId(user1Id);
+        itemRequest1ByUser1.setDescription("Need new Item");
+        itemRequest1ByUser1.setCreated(LocalDateTime.now());
+        itemRequestRepository.save(itemRequest1ByUser1);
+
+        itemRequest1IdByUser1 = itemRequestRepository.findAll().get(0).getId();
+
+        itemRequest1ByUser1Dto = new ItemRequestDto();
+        itemRequest1ByUser1Dto = ItemRequestMapper.INSTANT.toItemRequestDto(
+                itemRequestRepository.getItemRequestById(itemRequest1IdByUser1));
+
+        itemsRequestsByUser1.add(itemRequest1ByUser1Dto);
+    }
+
+    @AfterAll()
+    void removeAll() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "bookings", "comments", "items", "requests", "users");
     }
 
     @Test
-    void saveRequest_whenUserAndItemRequestIsCorrect_thenSave() {
-        when(itemRequestRepository.save(itemRequest))
-                .thenReturn(itemRequest);
-
-        ItemRequestDto actualItemRequestDto = itemRequestService.saveRequest(itemRequest, userId);
-
-        verify(itemRequestRepository).save(itemRequest);
+    void saveRequest_SUCCESS() {
+        ItemRequestDto actualItemRequestDto = itemRequestService.saveRequest(itemRequest1ByUser1, user1Id);
         assertAll(
-                () -> assertEquals(itemRequest.getId(), actualItemRequestDto.getId()),
-                () -> assertEquals(itemRequest.getRequesterId(), actualItemRequestDto.getRequestorId()),
-                () -> assertEquals(itemRequest.getDescription(), actualItemRequestDto.getDescription()),
-                () -> assertEquals(itemRequest.getCreated(), actualItemRequestDto.getCreated())
-        );
+                () -> assertEquals(itemRequest1ByUser1Dto.getId(), actualItemRequestDto.getId()),
+                () -> assertEquals(itemRequest1ByUser1Dto.getDescription(), actualItemRequestDto.getDescription()),
+                () -> assertEquals(itemRequest1ByUser1Dto.getRequestorId(), actualItemRequestDto.getRequestorId()),
+                () -> assertEquals(itemRequest1ByUser1Dto.getItems(), actualItemRequestDto.getItems()));
     }
 
     @Test
-    void saveRequest_whenUserNotPresent_thenNotFoundException() {
-        when(userValidation.isPresent(userId))
-                .thenThrow(NotFoundException.class);
-
-        assertThrows(NotFoundException.class,
-                () -> itemRequestService.saveRequest(itemRequest, userId));
-
-        verify(itemRequestRepository, never()).save(itemRequest);
-    }
-
-    @Test
-    void saveRequest_whenItemRequestNotValid_thenModelValidationException() {
-
-        doThrow(ModelValidationException.class)
-                .when(itemRequestValidation).requestValidation(itemRequest);
-
+    void saveRequest_FAIL_itemRequestNotValid() {
+        itemRequest1ByUser1.setDescription(null);
         assertThrows(ModelValidationException.class,
-                () -> itemRequestService.saveRequest(itemRequest, userId));
-
-        verify(itemRequestRepository, never()).save(itemRequest);
+                () -> itemRequestService.saveRequest(itemRequest1ByUser1, user1Id));
     }
 
     @Test
     void findRequestsByOwnerId() {
-        when(itemRequestRepository.findAllByRequesterIdOrderByCreatedDesc(userId)
-                .stream()
-                .map(ItemRequestMapper.INSTANT::toItemRequestDto)
-                .collect(Collectors.toList()))
-                .thenReturn(itemRequestDtoList);
-
-        List<ItemRequest> itemRequests = itemRequestRepository.findAllByRequesterIdOrderByCreatedDesc(userId);
-
-        verify(itemRequestRepository).findAllByRequesterIdOrderByCreatedDesc(userId);
-
+        List<ItemRequestDto> actualIemRequestList = itemRequestService.findRequestsByOwnerId(user1Id);
+        assertEquals(itemsRequestsByUser1, actualIemRequestList);
     }
 
     @Test
-    void findAll() throws Exception {
-
-        when(itemRequestRepository.findAllByRequesterIdNot(userId, pageRequest))
-                .thenReturn(Page.empty());
-
-        Slice<ItemRequest> itemRequests = itemRequestRepository.findAllByRequesterIdNot(userId, pageRequest);
-
-        verify(itemRequestRepository).findAllByRequesterIdNot(userId, pageRequest);
+    void findAll() {
+        List<ItemRequestDto> actualIemRequestList = itemRequestService.findAll(user2Id, pageRequest);
+        assertEquals(itemsRequestsByUser1, actualIemRequestList);
     }
 
     @Test
     void getRequestById() {
-        when(itemRequestRepository.getById(iteRequestId)).thenReturn(itemRequest);
+        ItemRequestDto actualItemRequestDto = itemRequestService.getRequestById(user1Id, itemRequest1IdByUser1);
+        assertEquals(itemRequest1ByUser1Dto, actualItemRequestDto);
 
-        ItemRequestDto actualItemRequest = ItemRequestMapper.INSTANT.toItemRequestDto(itemRequestRepository.getById(iteRequestId));
-
-        verify(itemRequestRepository).getById(iteRequestId);
     }
 }
