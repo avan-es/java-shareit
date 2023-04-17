@@ -33,7 +33,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookingServiceImplTest {
 
     @Autowired
@@ -91,6 +91,7 @@ class BookingServiceImplTest {
 
         bookingList.clear();
         bookingDtoList.clear();
+        itemsByUser1.clear();
 
         //Добавляем пользователей
         user1 = new User();
@@ -152,7 +153,7 @@ class BookingServiceImplTest {
 
     }
 
-    @AfterAll()
+    @AfterEach()
     void removeAll() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "bookings", "comments", "items", "requests", "users");
     }
