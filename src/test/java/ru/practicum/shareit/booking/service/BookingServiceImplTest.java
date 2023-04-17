@@ -249,7 +249,7 @@ class BookingServiceImplTest {
                 () -> assertEquals(bookingDtoList.size(), actualBookingList.size()));
     }
 
-    private void setCorrectDateInBooing (BookingDto actualBooking) {
+    private void setCorrectDateInBooing(BookingDto actualBooking) {
         bookingUser2Item1ByUser1Dto.setStart(actualBooking.getStart());
         bookingUser2Item1ByUser1Dto.setEnd(actualBooking.getEnd());
     }
