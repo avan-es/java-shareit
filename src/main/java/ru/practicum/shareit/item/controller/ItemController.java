@@ -11,7 +11,6 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,14 +69,12 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@PathVariable Long itemId,
-                              @RequestBody CommentDto commentDto,
-                              @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+    public CommentDto addComment( @RequestBody CommentDto commentDto,
+                                  @PathVariable Long itemId,
+                                  @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         if (commentDto.getText().isBlank()) {
             throw new BadRequest("Текст отзыва не может быть пустым.");
         }
-        commentDto.setCreated(LocalDateTime.now());
-
         return itemService.saveComment(commentDto, itemId, userId);
     }
 }

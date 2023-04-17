@@ -135,6 +135,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto saveComment(CommentDto commentDto, Long itemId, Long userId) {
         Item item = itemValidation.isPresent(itemId);
         User user = userValidation.isPresent(userId);
+        commentDto.setCreated(LocalDateTime.now());
         commentDto.setAuthorName(user.getName());
         Booking booking = bookingRepository.getBookingForComment(userId, itemId, commentDto.getCreated());
         if (booking == null) {
