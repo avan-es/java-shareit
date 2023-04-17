@@ -53,7 +53,7 @@ class UserValidationTest {
 
        userValidation.isPresent(user.getId());
 
-        verify(userRepository, times(1)).getById(user.getId());
+        verify(userRepository, times(1)).getUserById(user.getId());
 
     }
 
