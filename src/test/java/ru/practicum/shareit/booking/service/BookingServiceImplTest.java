@@ -33,7 +33,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookingServiceImplTest {
 
     @Autowired
@@ -153,7 +153,7 @@ class BookingServiceImplTest {
 
     }
 
-    @AfterEach()
+    @AfterAll()
     void removeAll() {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "bookings", "comments", "items", "requests", "users");
     }
@@ -214,7 +214,7 @@ class BookingServiceImplTest {
 
     @Test
     void getBooking_ByOwner() {
-        bookingService.saveBooking(bookingUser2Item1ByUser1, user2Id);
+        //bookingService.saveBooking(bookingUser2Item1ByUser1, user2Id);
         BookingDto actualBooking = bookingService.getBooking(bookingId, user1Id);
         setCorrectDateInBooing(actualBooking);
         assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
@@ -223,7 +223,7 @@ class BookingServiceImplTest {
 
     @Test
     void getBooking_ByBooker() {
-        bookingService.saveBooking(bookingUser2Item1ByUser1, user2Id);
+        //bookingService.saveBooking(bookingUser2Item1ByUser1, user2Id);
         BookingDto actualBooking = bookingService.getBooking(bookingId, user2Id);
         setCorrectDateInBooing(actualBooking);
         assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
