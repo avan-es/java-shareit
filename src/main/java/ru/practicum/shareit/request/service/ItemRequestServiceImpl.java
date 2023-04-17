@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -72,6 +73,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return result;
     }
 
+    @Transactional
     @Override
     public ItemRequestDto getRequestById(Long userId, Long requestId) {
         userValidation.isPresent(userId);
