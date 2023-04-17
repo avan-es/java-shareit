@@ -69,9 +69,9 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment( @RequestBody CommentDto commentDto,
-                                  @PathVariable Long itemId,
-                                  @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+    public CommentDto addComment(@RequestBody CommentDto commentDto,
+                                 @PathVariable Long itemId,
+                                 @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         if (commentDto.getText().isBlank()) {
             throw new BadRequest("Текст отзыва не может быть пустым.");
         }
