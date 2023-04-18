@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookingMapperTest {
 
-    
     @Test
     void toBookingDto() {
         Booking booking = new Booking();

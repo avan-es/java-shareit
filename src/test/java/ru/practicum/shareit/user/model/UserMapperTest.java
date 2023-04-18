@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.user.dto.UserBookingDto;
 import ru.practicum.shareit.user.dto.UserDto;
