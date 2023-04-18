@@ -14,16 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ItemRequestMapperTest {
 
-    ItemRequest itemRequest = new ItemRequest();
+    @Test
+    void toItemRequestDto() {
 
-    List<ItemDto> itemDtos = new ArrayList<>();
-
-    @BeforeEach
-    void setUp() {
+        ItemRequest itemRequest = new ItemRequest();
         itemRequest.setId(0L);
         itemRequest.setRequesterId(1L);
         itemRequest.setCreated(LocalDateTime.now());
         itemRequest.setDescription("Item Request");
+
+        List<ItemDto> itemDtos = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             ItemDto itemDto = new ItemDto();
@@ -40,10 +40,7 @@ class ItemRequestMapperTest {
 
             itemDtos.add(itemDto);
         }
-    }
 
-    @Test
-    void toItemRequestDto() {
         ItemRequestDto itemRequestDto = ItemRequestMapper.INSTANT.toItemRequestDto(itemRequest);
 
         assertAll(

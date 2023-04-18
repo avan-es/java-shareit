@@ -12,14 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookingMapperTest {
 
-    Booking booking = new Booking();
-    ItemBookingDto item = new ItemBookingDto();
-    UserBookingDto user = new UserBookingDto();
-
-
-
+    
     @Test
     void toBookingDto() {
+        Booking booking = new Booking();
+        ItemBookingDto item = new ItemBookingDto();
+        UserBookingDto user = new UserBookingDto();
+
         booking.setId(0L);
         booking.setItemId(1L);
         booking.setBookerId(2L);

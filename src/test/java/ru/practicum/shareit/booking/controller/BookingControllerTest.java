@@ -46,28 +46,10 @@ class BookingControllerTest {
     @MockBean
     ItemService itemService;
 
-    Long ownerId = 0L;
-    Long bookerId = 0L;
-
-
-    Long itemId = 0L;
-
-    Long bookingId = 0L;
-
-    Booking booking = new Booking();
-    BookingDto bookingDto = new BookingDto();
-
-    ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
-
-    UserBookingDto userBookingDto = new UserBookingDto(bookerId);
-
-    User user = new User();
-
-    UserDto userDto = new UserDto();
-
-
-    @BeforeEach
-    void setUp() {
+    @Test
+    void addBooking() throws Exception {
+        Long bookerId = 0L;
+        Booking booking = new Booking();
         booking.setId(0L);
         booking.setBookerId(bookerId);
         booking.setStatus(String.valueOf(BookingState.WAITING));
@@ -75,17 +57,12 @@ class BookingControllerTest {
         booking.setEnd(LocalDateTime.now().plusDays(1));
         booking.setItemId(0L);
 
-        bookingDto = BookingMapper.INSTANT.toBookingDto(booking, itemBookingDto, userBookingDto);
+        Long itemId = 0L;
+        ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
+        UserBookingDto userBookingDto = new UserBookingDto(bookerId);
+        BookingDto bookingDto = BookingMapper.INSTANT.toBookingDto(booking, itemBookingDto, userBookingDto);
 
-        user.setId(ownerId);
-        user.setName("User");
-        user.setEmail("user@meil.ru");
 
-        userDto = UserMapper.INSTANT.toUserDto(user);
-    }
-
-    @Test
-    void addBooking() throws Exception {
         when(bookingService.saveBooking(booking, bookerId))
                 .thenReturn(bookingDto);
 
@@ -101,6 +78,23 @@ class BookingControllerTest {
 
     @Test
     void updateItem() throws Exception {
+        Long ownerId = 0L;
+        Long bookingId = 0L;
+
+        Long bookerId = 0L;
+        Booking booking = new Booking();
+        booking.setId(0L);
+        booking.setBookerId(bookerId);
+        booking.setStatus(String.valueOf(BookingState.WAITING));
+        booking.setStart(LocalDateTime.now());
+        booking.setEnd(LocalDateTime.now().plusDays(1));
+        booking.setItemId(0L);
+
+        Long itemId = 0L;
+        ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
+        UserBookingDto userBookingDto = new UserBookingDto(bookerId);
+        BookingDto bookingDto = BookingMapper.INSTANT.toBookingDto(booking, itemBookingDto, userBookingDto);
+
         when(bookingService.acceptBooking(bookingId, ownerId, true)).thenReturn(bookingDto);
         String result = mockMvc.perform(MockMvcRequestBuilders.patch("/bookings/{bookingId}", bookingId)
                         .header("X-Sharer-User-Id", ownerId)
@@ -117,7 +111,10 @@ class BookingControllerTest {
 
     @Test
     void getAllBooking() throws Exception {
+        Long bookerId = 0L;
+        Long bookingId = 0L;
         List<Booking> bookingDtos = List.of();
+
         when(bookingService.getAllItems()).thenReturn(bookingDtos);
 
         mockMvc.perform(get("/bookings/all", bookingId)
@@ -129,8 +126,19 @@ class BookingControllerTest {
 
     @Test
     void getAllUsersBookings() throws Exception {
+        Long bookerId = 0L;
         PageRequest pageRequest = PageRequest.of(0, 10);
+
         List<BookingDto> bookingDtos = List.of();
+
+        User user = new User();
+        Long ownerId = 0L;
+        user.setId(ownerId);
+        user.setName("User");
+        user.setEmail("user@meil.ru");
+
+        UserDto userDto = UserMapper.INSTANT.toUserDto(user);
+
         when(userService.getUserById(bookerId)).thenReturn(userDto);
         when(bookingService.getBookingByState(bookerId, BookingState.REJECTED.toString(), pageRequest, false)).thenReturn(bookingDtos);
 
@@ -147,6 +155,15 @@ class BookingControllerTest {
     @Test
     void getAllOwnerBookings() throws Exception {
         PageRequest pageRequest = PageRequest.of(0, 10);
+
+        User user = new User();
+        Long ownerId = 0L;
+        user.setId(ownerId);
+        user.setName("User");
+        user.setEmail("user@meil.ru");
+
+        UserDto userDto = UserMapper.INSTANT.toUserDto(user);
+
         List<BookingDto> bookingDtos = List.of();
         when(userService.getUserById(ownerId)).thenReturn(userDto);
         when(bookingService.getBookingByState(ownerId, BookingState.REJECTED.toString(), pageRequest, true)).thenReturn(bookingDtos);
@@ -163,6 +180,22 @@ class BookingControllerTest {
 
     @Test
     void getBooking() throws Exception {
+        Long bookingId = 0L;
+
+        Long bookerId = 0L;
+        Booking booking = new Booking();
+        booking.setId(0L);
+        booking.setBookerId(bookerId);
+        booking.setStatus(String.valueOf(BookingState.WAITING));
+        booking.setStart(LocalDateTime.now());
+        booking.setEnd(LocalDateTime.now().plusDays(1));
+        booking.setItemId(0L);
+
+        Long itemId = 0L;
+        ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
+        UserBookingDto userBookingDto = new UserBookingDto(bookerId);
+        BookingDto bookingDto = BookingMapper.INSTANT.toBookingDto(booking, itemBookingDto, userBookingDto);
+
         when(bookingService.getBooking(bookingId, bookerId)).thenReturn(bookingDto);
 
         mockMvc.perform(get("/bookings/{bookingId}", bookingId)

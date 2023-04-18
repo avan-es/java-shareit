@@ -8,30 +8,16 @@ import ru.practicum.shareit.user.dto.UserDto;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserMapperTest {
-    User user = new User();
 
-    UserDto userDto = new UserDto();
-
-    User userFromDto = new User();
-
-    UserDto userDtoFromUser = new UserDto();
-
-    UserBookingDto userBookingDto = new UserBookingDto();
-
-    @BeforeEach
-    void serUp() {
+    @Test
+    void toUserDto() {
+        User user = new User();
         user.setId(0L);
         user.setName("User1");
         user.setEmail("user1@mail.ru");
 
-        userDto.setId(0L);
-        userDto.setName("User1");
-        userDto.setEmail("user1@mail.ru");
-    }
+        UserDto userDtoFromUser = UserMapper.INSTANT.toUserDto(user);
 
-    @Test
-    void toUserDto() {
-        userDtoFromUser = UserMapper.INSTANT.toUserDto(user);
         assertAll(
                 () -> assertEquals(userDtoFromUser.getId(), user.getId()),
                 () -> assertEquals(userDtoFromUser.getName(), user.getName()),
@@ -39,15 +25,27 @@ class UserMapperTest {
         );
     }
 
-    @Test
+   @Test
     void toUserBookingDto() {
-        userBookingDto = UserMapper.INSTANT.toUserBookingDto(user);
-        assertEquals(userBookingDto.getId(), user.getId());
+       User user = new User();
+       user.setId(0L);
+       user.setName("User1");
+       user.setEmail("user1@mail.ru");
+
+       UserBookingDto userBookingDto = UserMapper.INSTANT.toUserBookingDto(user);
+
+       assertEquals(userBookingDto.getId(), user.getId());
     }
 
     @Test
     void toUser() {
-        userFromDto = UserMapper.INSTANT.toUser(userDto);
+        UserDto userDto = new UserDto();
+        userDto.setId(0L);
+        userDto.setName("User1");
+        userDto.setEmail("user1@mail.ru");
+
+        User userFromDto = UserMapper.INSTANT.toUser(userDto);
+
         assertAll(
                 () -> assertEquals(userFromDto.getId(), userDto.getId()),
                 () -> assertEquals(userFromDto.getName(), userDto.getName()),

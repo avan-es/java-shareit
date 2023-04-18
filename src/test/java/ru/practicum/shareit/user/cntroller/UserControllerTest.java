@@ -27,25 +27,21 @@ class UserControllerTest {
     MockMvc mockMvc;
     @MockBean
     UserService userService;
-    long userId = 1L;
-    User user = new User();
-    UserDto userDto = new UserDto();
-    List<User> users = List.of();
-    List<UserDto> userDtos = List.of();
 
-    @BeforeEach
-    void serUp() {
+    @Test
+    void addUser() throws Exception {
+        long userId = 1L;
+
+        User user = new User();
         user.setId(userId);
         user.setName("User1");
         user.setEmail("user1@mail.ru");
 
+        UserDto userDto = new UserDto();
         userDto.setId(userId);
         userDto.setName("User1");
         userDto.setEmail("user1@mail.ru");
-    }
 
-    @Test
-    void addUser() throws Exception {
         when(userService.saveUser(user)).thenReturn(userDto);
         String result = mockMvc.perform(post("/users", user)
                         .contentType("application/json")
@@ -60,6 +56,12 @@ class UserControllerTest {
 
     @Test
     void updateUser() throws Exception {
+        long userId = 1L;
+        UserDto userDto = new UserDto();
+        userDto.setId(userId);
+        userDto.setName("User1");
+        userDto.setEmail("user1@mail.ru");
+
         when(userService.updateUser(userDto)).thenReturn(userDto);
         String result = mockMvc.perform(patch("/users/{id}", userId, userDto)
                         .contentType("application/json")
@@ -74,6 +76,8 @@ class UserControllerTest {
 
     @Test
     void getUsers() throws Exception {
+        List<UserDto> userDtos = List.of();
+
         when(userService.getAllUsers()).thenReturn(userDtos);
 
         mockMvc.perform(get("/users"))
@@ -84,6 +88,12 @@ class UserControllerTest {
 
     @Test
     void getUser() throws Exception {
+        long userId = 1L;
+        UserDto userDto = new UserDto();
+        userDto.setId(userId);
+        userDto.setName("User1");
+        userDto.setEmail("user1@mail.ru");
+
         when(userService.getUserById(userId)).thenReturn(userDto);
 
         mockMvc.perform(get("/users/{id}", userId))
@@ -94,6 +104,8 @@ class UserControllerTest {
 
     @Test
     void deleteUser() throws Exception {
+        long userId = 1L;
+
         mockMvc.perform(delete("/users/{id}", userId))
                 .andExpect(status().isOk());
         verify(userService).deleteUser(userId);

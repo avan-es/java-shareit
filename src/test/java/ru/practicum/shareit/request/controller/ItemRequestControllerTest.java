@@ -33,17 +33,12 @@ class ItemRequestControllerTest {
     @MockBean
     ItemRequestService requestService;
 
-    Long itemRequestId = 0L;
-
-    Long userId = 0L;
-
-    ItemRequest itemRequest = new ItemRequest();
-    ItemRequestDto itemRequestDto = new ItemRequestDto();
-
-    List<ItemRequestDto> itemRequestDtoList =  List.of();
-
     @Test
     void addRequest() throws  Exception {
+        Long userId = 0L;
+        ItemRequest itemRequest = new ItemRequest();
+        ItemRequestDto itemRequestDto = new ItemRequestDto();
+
         when(requestService.saveRequest(itemRequest, userId)).thenReturn(itemRequestDto);
         String result = mockMvc.perform(post("/requests", itemRequest, userId)
                         .header("X-Sharer-User-Id", userId)
@@ -59,6 +54,9 @@ class ItemRequestControllerTest {
 
     @Test
     void getUserRequests() throws Exception {
+        Long userId = 0L;
+        List<ItemRequestDto> itemRequestDtoList =  List.of();
+
         when(requestService.findRequestsByOwnerId(userId)).thenReturn(itemRequestDtoList);
 
         mockMvc.perform(get("/requests")
@@ -70,6 +68,9 @@ class ItemRequestControllerTest {
 
     @Test
     void getAllRequests() throws Exception {
+        Long userId = 0L;
+        List<ItemRequestDto> itemRequestDtoList =  List.of();
+
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"));
         when(requestService.findAll(userId, pageRequest)).thenReturn(itemRequestDtoList);
 
@@ -84,6 +85,10 @@ class ItemRequestControllerTest {
 
     @Test
     void getRequestById() throws Exception {
+        Long itemRequestId = 0L;
+        Long userId = 0L;
+        ItemRequestDto itemRequestDto = new ItemRequestDto();
+
         when(requestService.getRequestById(userId, itemRequestId)).thenReturn(itemRequestDto);
 
         mockMvc.perform(get("/requests/{requestId}", itemRequestId, userId)

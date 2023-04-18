@@ -31,23 +31,24 @@ class UserValidationTest {
     @Mock
     UserRepository userRepository;
 
-    User user = new User();
-
-    @BeforeEach
-    void setUp() {
+    @Test
+    void isEmailValid() {
+        User user = new User();
         user.setId(0L);
         user.setName("User");
         user.setEmail("user@mail.ru");
-    }
 
-    @Test
-    void isEmailValid() {
         userValidationMock.isEmailValid(user);
         verify(userValidationMock, times(1)).isEmailValid(user);
     }
 
     @Test
     void isPresent_SUCCESS() {
+        User user = new User();
+        user.setId(0L);
+        user.setName("User");
+        user.setEmail("user@mail.ru");
+
        when(userRepository.findById(any()))
                 .thenReturn(Optional.ofNullable(user));
 
@@ -59,6 +60,10 @@ class UserValidationTest {
 
     @Test
     void isPresent_FAIL() {
+        User user = new User();
+        user.setId(0L);
+        user.setName("User");
+        user.setEmail("user@mail.ru");
 
         doThrow(NotFoundException.class)
                 .when(userRepository).findById(any());
@@ -72,6 +77,11 @@ class UserValidationTest {
 
     @Test
     void emailValidationForExistUser() {
+        User user = new User();
+        user.setId(0L);
+        user.setName("User");
+        user.setEmail("user@mail.ru");
+
         when(userRepository.findByEmail(any()))
                 .thenReturn(user);
 
