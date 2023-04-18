@@ -21,7 +21,6 @@ import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.validation.ItemValidation;
 import ru.practicum.shareit.user.dto.UserBookingDto;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.validation.UserValidation;
