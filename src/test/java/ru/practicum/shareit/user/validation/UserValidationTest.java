@@ -23,15 +23,15 @@ class UserValidationTest {
 
 
     @InjectMocks
-    private UserValidation userValidation;
+    UserValidation userValidation;
 
     @Mock
-    private UserValidation userValidationMock;
+    UserValidation userValidationMock;
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
-    private User user = new User();
+    User user = new User();
 
     @BeforeEach
     void setUp() {

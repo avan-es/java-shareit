@@ -37,21 +37,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingServiceImplTest {
 
     @Autowired
-    private BookingRepository bookingRepository;
+    BookingRepository bookingRepository;
     @Autowired
-    private BookingService bookingService;
+    BookingService bookingService;
     @Autowired
-    private UserValidation userValidation;
+    UserValidation userValidation;
     @Autowired
-    private ItemValidation itemValidation;
+    ItemValidation itemValidation;
     @Autowired
-    private BookingValidation bookingValidation;
+    BookingValidation bookingValidation;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     Item item1ByUser1;
     Long item1ByUser1Id;
@@ -83,7 +83,6 @@ class BookingServiceImplTest {
 
     List<BookingDto> bookingDtoList = new ArrayList<>();
 
-    PageRequest pageRequest = PageRequest.of(0, 10);
 
     @BeforeEach
     void setUp() {
@@ -240,6 +239,7 @@ class BookingServiceImplTest {
 
     @Test
     void getBookingByState_Owner_ALL() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         bookingService.saveBooking(bookingUser2Item1ByUser1, user2Id);
         List<BookingDto> actualBookingList = bookingService.getBookingByState(user1Id, "ALL", pageRequest, true);
         assertAll(

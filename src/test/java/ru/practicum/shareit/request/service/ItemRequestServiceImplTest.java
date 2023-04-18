@@ -33,25 +33,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRequestServiceImplTest {
 
     @Autowired
-    private ItemRequestRepository itemRequestRepository;
+    ItemRequestRepository itemRequestRepository;
 
     @Autowired
-    private ItemRequestService itemRequestService;
+    ItemRequestService itemRequestService;
 
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
 
     @Autowired
-    private UserValidation userValidation;
+    UserValidation userValidation;
 
     @Autowired
-    private ItemRequestValidation itemRequestValidation;
+    ItemRequestValidation itemRequestValidation;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     User user1;
     Long user1Id;
@@ -65,8 +65,6 @@ class ItemRequestServiceImplTest {
     Long itemRequest1IdByUser1;
     ItemRequestDto itemRequest1ByUser1Dto;
     List<ItemRequestDto> itemsRequestsByUser1 = new ArrayList<>();
-
-    PageRequest pageRequest = PageRequest.of(0, 10);
 
     @BeforeEach
     void add() {
@@ -142,6 +140,7 @@ class ItemRequestServiceImplTest {
 
     @Test
     void findAll() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemRequestDto> actualIemRequestList = itemRequestService.findAll(user2Id, pageRequest);
         assertEquals(itemsRequestsByUser1, actualIemRequestList);
     }

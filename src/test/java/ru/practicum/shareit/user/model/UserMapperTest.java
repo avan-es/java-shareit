@@ -8,15 +8,15 @@ import ru.practicum.shareit.user.dto.UserDto;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserMapperTest {
-    private User user = new User();
+    User user = new User();
 
-    private UserDto userDto = new UserDto();
+    UserDto userDto = new UserDto();
 
-    private User userFromDto = new User();
+    User userFromDto = new User();
 
-    private UserDto userDtoFromUser = new UserDto();
+    UserDto userDtoFromUser = new UserDto();
 
-    private UserBookingDto userBookingDto = new UserBookingDto();
+    UserBookingDto userBookingDto = new UserBookingDto();
 
     @BeforeEach
     void serUp() {

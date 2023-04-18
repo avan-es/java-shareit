@@ -35,24 +35,24 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemServiceImplTest {
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Autowired
-    private UserValidation userValidation;
+    UserValidation userValidation;
     @Autowired
-    private ItemValidation itemValidation;
+    ItemValidation itemValidation;
     @Autowired
-    private BookingRepository bookingRepository;
+    BookingRepository bookingRepository;
     @Autowired
-    private CommentRepository commentRepository;
+    CommentRepository commentRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private ItemService itemService;
+    ItemService itemService;
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private ItemRequestRepository itemRequestRepository;
+    ItemRequestRepository itemRequestRepository;
 
     Item item1ByUser1;
     Long item1ByUser1Id;
@@ -74,9 +74,6 @@ class ItemServiceImplTest {
 
     Booking bookingUser2Item1ByUser1 = new Booking();
     List<Booking> bookingList = new ArrayList<>();
-
-    PageRequest pageRequest = PageRequest.of(0, 10);
-
 
     @BeforeEach
     void setUp() {
@@ -161,6 +158,7 @@ class ItemServiceImplTest {
 
     @Test
     void getUsersItems() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemDto> actualListItemDto = itemService.getUsersItems(user1Id,pageRequest);
         assertEquals(itemsByUser1, actualListItemDto);
     }
@@ -173,6 +171,7 @@ class ItemServiceImplTest {
 
     @Test
     void searchItem() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemDto> actualListItemDto = itemService.searchItem("1", pageRequest);
         assertEquals(itemsByUser1, actualListItemDto);
     }

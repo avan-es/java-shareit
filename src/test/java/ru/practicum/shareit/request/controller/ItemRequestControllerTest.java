@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ItemRequestControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
     ItemRequestService requestService;
@@ -41,9 +41,6 @@ class ItemRequestControllerTest {
     ItemRequestDto itemRequestDto = new ItemRequestDto();
 
     List<ItemRequestDto> itemRequestDtoList =  List.of();
-
-    PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"));
-
 
     @Test
     void addRequest() throws  Exception {
@@ -73,6 +70,7 @@ class ItemRequestControllerTest {
 
     @Test
     void getAllRequests() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"));
         when(requestService.findAll(userId, pageRequest)).thenReturn(itemRequestDtoList);
 
         mockMvc.perform(get("/requests/all")

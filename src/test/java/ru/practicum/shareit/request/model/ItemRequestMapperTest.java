@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ItemRequestMapperTest {
 
-    private ItemRequest itemRequest = new ItemRequest();
+    ItemRequest itemRequest = new ItemRequest();
 
-    private List<ItemDto> itemDtos = new ArrayList<>();
+    List<ItemDto> itemDtos = new ArrayList<>();
 
     @BeforeEach
     void setUp() {

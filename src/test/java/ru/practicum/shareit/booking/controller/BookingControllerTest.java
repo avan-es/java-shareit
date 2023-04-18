@@ -36,36 +36,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BookingControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
     @MockBean
-    private BookingService bookingService;
+    BookingService bookingService;
     @MockBean
-    private UserService userService;
+    UserService userService;
     @MockBean
-    private ItemService itemService;
+    ItemService itemService;
 
-    private Long ownerId = 0L;
-    private Long bookerId = 0L;
+    Long ownerId = 0L;
+    Long bookerId = 0L;
 
 
-    private Long itemId = 0L;
+    Long itemId = 0L;
 
-    private Long bookingId = 0L;
+    Long bookingId = 0L;
 
-    private Booking booking = new Booking();
-    private BookingDto bookingDto = new BookingDto();
+    Booking booking = new Booking();
+    BookingDto bookingDto = new BookingDto();
 
-    private ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
+    ItemBookingDto itemBookingDto = new ItemBookingDto(itemId, "Item");
 
-    private UserBookingDto userBookingDto = new UserBookingDto(bookerId);
+    UserBookingDto userBookingDto = new UserBookingDto(bookerId);
 
-    private User user = new User();
+    User user = new User();
 
-    private UserDto userDto = new UserDto();
-
-    private PageRequest pageRequest = PageRequest.of(0, 10);
+    UserDto userDto = new UserDto();
 
 
     @BeforeEach
@@ -131,6 +129,7 @@ class BookingControllerTest {
 
     @Test
     void getAllUsersBookings() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<BookingDto> bookingDtos = List.of();
         when(userService.getUserById(bookerId)).thenReturn(userDto);
         when(bookingService.getBookingByState(bookerId, BookingState.REJECTED.toString(), pageRequest, false)).thenReturn(bookingDtos);
@@ -147,6 +146,7 @@ class BookingControllerTest {
 
     @Test
     void getAllOwnerBookings() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<BookingDto> bookingDtos = List.of();
         when(userService.getUserById(ownerId)).thenReturn(userDto);
         when(bookingService.getBookingByState(ownerId, BookingState.REJECTED.toString(), pageRequest, true)).thenReturn(bookingDtos);

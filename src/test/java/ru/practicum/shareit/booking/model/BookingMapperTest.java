@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookingMapperTest {
 
-    private Booking booking = new Booking();
-    private ItemBookingDto item = new ItemBookingDto();
-    private UserBookingDto user = new UserBookingDto();
+    Booking booking = new Booking();
+    ItemBookingDto item = new ItemBookingDto();
+    UserBookingDto user = new UserBookingDto();
 
 
 

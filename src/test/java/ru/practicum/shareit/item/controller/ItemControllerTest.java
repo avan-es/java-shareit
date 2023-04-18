@@ -28,16 +28,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ItemControllerTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
     ItemService itemService;
 
     @MockBean
-    private UserService userService;
+    UserService userService;
 
     Long itemId = 0L;
 
@@ -50,8 +50,6 @@ class ItemControllerTest {
     UserDto userDto = new UserDto();
 
     CommentDto commentDto = new CommentDto();
-
-    PageRequest pageRequest = PageRequest.of(0, 10);
 
     @BeforeEach
     void setUp() {
@@ -107,6 +105,7 @@ class ItemControllerTest {
 
     @Test
     void getUsersItems() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemDto> itemDtoList = List.of();
         when(userService.getUserById(userId)).thenReturn(userDto);
         when(itemService.getUsersItems(userId, pageRequest)).thenReturn(itemDtoList);
@@ -122,6 +121,7 @@ class ItemControllerTest {
 
     @Test
     void searchItem() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemDto> itemDtoList = new ArrayList<>();
         when(itemService.searchItem("text", pageRequest)).thenReturn(itemDtoList);
 
@@ -136,6 +136,7 @@ class ItemControllerTest {
 
     @Test
     void searchItem_EmptyRequest() throws Exception {
+        PageRequest pageRequest = PageRequest.of(0, 10);
         List<ItemDto> itemDtoList = new ArrayList<>();
         when(itemService.searchItem("", pageRequest)).thenReturn(itemDtoList);
 

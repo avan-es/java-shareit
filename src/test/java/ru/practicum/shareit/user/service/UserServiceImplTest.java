@@ -26,16 +26,16 @@ import static org.mockito.Mockito.*;
 class UserServiceImplTest {
 
     @InjectMocks
-    private UserServiceImpl userService;
+    UserServiceImpl userService;
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Mock
-    private UserValidation userValidation;
+    UserValidation userValidation;
 
     @Captor
-    private ArgumentCaptor<User> userArgumentCaptor;
+    ArgumentCaptor<User> userArgumentCaptor;
 
 
     @Test
