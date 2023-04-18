@@ -12,7 +12,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.validation.BookingValidation;
-//import ru.practicum.shareit.exeptions.BadRequest;
 import ru.practicum.shareit.exeptions.BadRequest;
 import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemBookingDto;
@@ -58,7 +57,7 @@ class BookingServiceImplTest {
     Long item1ByUser1Id;
     ItemDto item1ByUser1Dto;
 
-    ItemBookingDto itemBookingDto = new ItemBookingDto();
+    ItemBookingDto itemBookingDto;
     List<ItemDto> itemsByUser1 = new ArrayList<>();
 
 
@@ -131,6 +130,7 @@ class BookingServiceImplTest {
 
         itemsByUser1.add(item1ByUser1Dto);
 
+        itemBookingDto = new ItemBookingDto();
         itemBookingDto.setId(item1ByUser1.getId());
         itemBookingDto.setName(item1ByUser1.getName());
 
