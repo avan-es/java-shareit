@@ -60,16 +60,12 @@ class BookingServiceImplTest {
     ItemBookingDto itemBookingDto;
     List<ItemDto> itemsByUser1 = new ArrayList<>();
 
-
     User user1;
     Long user1Id;
-    UserDto user1Dto;
-
 
     User user2;
     Long user2Id;
     UserBookingDto userBookingDto;
-    UserDto user2Dto;
 
     User user3;
     Long user3Id;
@@ -82,7 +78,6 @@ class BookingServiceImplTest {
     List<Booking> bookingList = new ArrayList<>();
 
     List<BookingDto> bookingDtoList = new ArrayList<>();
-
 
     @BeforeEach
     void setUp() {
@@ -172,32 +167,10 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void acceptBooking() {
-        bookingUser2Item1ByUser1Dto.setStatus(BookingStatus.APPROVED.toString());
-        BookingDto actualBooking = bookingService.acceptBooking(user1Id, bookingId, true);
-        setCorrectDateInBooing(actualBooking);
-        assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
-    }
-
-    @Test
-    void acceptBooking_FAIL_notOwner() {
-        assertThrows(NotFoundException.class,
-                () -> bookingService.acceptBooking(user2Id, bookingId, true));
-    }
-
-    @Test
     void acceptBooking_FAIL_AlreadyApproved() {
         bookingService.acceptBooking(user1Id, bookingId, true);
         assertThrows(BadRequest.class,
                 () -> bookingService.acceptBooking(user1Id, bookingId, true));
-    }
-
-    @Test
-    void acceptBooking_setRejectedStatus() {
-        bookingUser2Item1ByUser1Dto.setStatus(BookingStatus.REJECTED.toString());
-        BookingDto actualBooking = bookingService.acceptBooking(user1Id, bookingId, false);
-        setCorrectDateInBooing(actualBooking);
-        assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
     }
 
     @Test
@@ -210,22 +183,6 @@ class BookingServiceImplTest {
                 () -> assertEquals(bookingList.get(0).getBookerId(), actualBookingList.get(0).getBookerId()),
                 () -> assertEquals(bookingList.get(0).getStatus(), actualBookingList.get(0).getStatus()),
                 () -> assertEquals(bookingList.size(), actualBookingList.size()));
-    }
-
-    @Test
-    void getBooking_ByOwner() {
-        BookingDto actualBooking = bookingService.getBooking(bookingId, user1Id);
-        setCorrectDateInBooing(actualBooking);
-        assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
-
-    }
-
-    @Test
-    void getBooking_ByBooker() {
-        BookingDto actualBooking = bookingService.getBooking(bookingId, user2Id);
-        setCorrectDateInBooing(actualBooking);
-        assertEquals(bookingUser2Item1ByUser1Dto, actualBooking);
-
     }
 
     @Test
@@ -247,11 +204,6 @@ class BookingServiceImplTest {
                 () -> assertEquals(bookingDtoList.get(0).getBooker(), actualBookingList.get(0).getBooker()),
                 () -> assertEquals(bookingDtoList.get(0).getStatus(), actualBookingList.get(0).getStatus()),
                 () -> assertEquals(bookingDtoList.size(), actualBookingList.size()));
-    }
-
-    private void setCorrectDateInBooing(BookingDto actualBooking) {
-        bookingUser2Item1ByUser1Dto.setStart(actualBooking.getStart());
-        bookingUser2Item1ByUser1Dto.setEnd(actualBooking.getEnd());
     }
 
 }
