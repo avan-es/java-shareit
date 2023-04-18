@@ -166,10 +166,9 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void acceptBooking_FAIL_AlreadyApproved() {
-        bookingService.acceptBooking(user1Id, bookingId, true);
-        assertThrows(BadRequest.class,
-                () -> bookingService.acceptBooking(user1Id, bookingId, true));
+    void acceptBooking_FAIL_notOwner() {
+        assertThrows(NotFoundException.class,
+                () -> bookingService.acceptBooking(user2Id, bookingId, true));
     }
 
     @Test
