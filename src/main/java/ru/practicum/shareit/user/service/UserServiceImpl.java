@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
+        log.info("Получен список пользователей.");
         return userRepository.findAll().stream()
                 .map(UserMapper.INSTANT::toUserDto)
                 .collect(Collectors.toList());
@@ -51,8 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        userValidation.isPresent(userId);
-        return UserMapper.INSTANT.toUserDto(userRepository.getById(userId));
+        return UserMapper.INSTANT.toUserDto(userValidation.isPresent(userId));
     }
 
     @Override

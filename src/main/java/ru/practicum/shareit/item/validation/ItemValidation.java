@@ -39,7 +39,7 @@ public class ItemValidation {
             log.error(String.format("Объект с ID %s не найден.", itemId));
             throw new NotFoundException(String.format("Объект с ID %d не найден.", itemId));
         }
-        return itemRepository.getById(itemId);
+        return itemRepository.getItemById(itemId);
     }
 
     public void isAvailable(Long itemId) {

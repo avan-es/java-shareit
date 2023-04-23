@@ -40,7 +40,7 @@ public class UserValidation {
             log.error(String.format("Пользователь с ID %s не существует.", userId));
             throw new NotFoundException(String.format("Пользователь с ID %d не найден.", userId));
         }
-        return userRepository.getById(userId);
+        return userRepository.getUserById(userId);
     }
 
     public void emailValidationForExistUser(User user) {

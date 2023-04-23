@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
 import ru.practicum.shareit.item.dto.ItemBookingDto;
-import ru.practicum.shareit.item.dto.ItemBookingForOwnerDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 public enum ItemMapper {
@@ -13,6 +12,7 @@ public enum ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
+        itemDto.setRequestId(item.getRequestId());
         return itemDto;
     }
 
@@ -23,10 +23,4 @@ public enum ItemMapper {
         return itemBookingDto;
     }
 
-    public ItemBookingForOwnerDto toItemBookingForOwnerDto(Item item) {
-        ItemBookingForOwnerDto itemBookingForOwnerDto = new ItemBookingForOwnerDto();
-        itemBookingForOwnerDto.setId(item.getId());
-        itemBookingForOwnerDto.setName(item.getName());
-        return itemBookingForOwnerDto;
-    }
 }

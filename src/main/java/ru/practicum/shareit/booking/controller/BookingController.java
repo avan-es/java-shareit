@@ -1,11 +1,14 @@
 package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -35,14 +38,18 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getAllUsersBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                          @RequestParam(name = "state", defaultValue = "ALL") String state) {
-        return bookingService.getUsersBookingByState(userId, state);
+                                          @RequestParam(name = "state", defaultValue = "ALL") String state,
+                                          @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                          @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
+        return bookingService.getBookingByState(userId, state, PageRequest.of(page, size), false);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getAllOwnerBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                             @RequestParam(name = "state", defaultValue = "ALL") String state) {
-        return bookingService.getOwnerBookingByState(userId, state);
+                                             @RequestParam(name = "state", defaultValue = "ALL") String state,
+                                             @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                             @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
+        return bookingService.getBookingByState(userId, state, PageRequest.of(page, size), true);
     }
 
     @GetMapping("/{bookingId}")

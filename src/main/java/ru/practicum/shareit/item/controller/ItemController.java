@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exeptions.BadRequest;
 import ru.practicum.shareit.item.comment.CommentDto;
@@ -8,7 +9,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +41,18 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getUsersItems(@RequestHeader (value = "X-Sharer-User-Id") Long userId) {
-        return itemService.getUsersItems(userId);
+    public List<ItemDto> getUsersItems(@RequestHeader (value = "X-Sharer-User-Id") Long userId,
+                                       @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                       @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
+        return itemService.getUsersItems(userId, PageRequest.of(page, size));
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItem(@RequestParam String text) {
+    public List<ItemDto> searchItem(@RequestParam String text,
+                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                    @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         if (!text.isBlank()) {
-            return itemService.searchItem(text);
+            return itemService.searchItem(text, PageRequest.of(page, size));
         }
         return new ArrayList<>();
     }
@@ -63,14 +69,12 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@PathVariable Long itemId,
-                              @RequestBody CommentDto commentDto,
-                              @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+    public CommentDto addComment(@RequestBody CommentDto commentDto,
+                                 @PathVariable Long itemId,
+                                 @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         if (commentDto.getText().isBlank()) {
             throw new BadRequest("Текст отзыва не может быть пустым.");
         }
-        commentDto.setCreated(LocalDateTime.now());
-
         return itemService.saveComment(commentDto, itemId, userId);
     }
 }
