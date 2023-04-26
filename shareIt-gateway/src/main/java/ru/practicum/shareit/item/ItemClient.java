@@ -8,8 +8,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.item.comment.CommentGatewayDto;
-import ru.practicum.shareit.item.dto.ItemGatewayDto;
+import ru.practicum.shareit.item.comment.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Map;
 
@@ -28,11 +28,11 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> addItem(ItemGatewayDto item, Long userId) {
+    public ResponseEntity<Object> addItem(ItemDto item, Long userId) {
         return post("", userId, item);
     }
 
-    public ResponseEntity<Object> updateItem(Long itemId, ItemGatewayDto itemDto, Long userId) {
+    public ResponseEntity<Object> updateItem(Long userId, ItemDto itemDto, Long itemId) {
         return patch("/" + itemId, userId, itemDto);
     }
 
@@ -40,7 +40,7 @@ public class ItemClient extends BaseClient {
         return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> getUsersItems(Long userId, Integer from, Integer size) {
+    public ResponseEntity<Object> getUsersItems(Integer from, Integer size, Long userId) {
         if (from == null) {
             return get("", userId);
         } else {
@@ -51,7 +51,7 @@ public class ItemClient extends BaseClient {
         }
     }
 
-    public ResponseEntity<Object> searchItem(String text, Integer from, Integer size, Long userId) {
+    public ResponseEntity<Object> searchItem(Integer from, Integer size, Long userId, String text) {
         Map<String, Object> parameters;
         if (from == null) {
             parameters = Map.of("text", text);
@@ -73,7 +73,7 @@ public class ItemClient extends BaseClient {
         return delete("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> addComment(CommentGatewayDto commentDto, Long itemId, Long userId) {
+    public ResponseEntity<Object> addComment(Long userId, Long itemId, CommentDto commentDto) {
         return post("/"+ itemId + "/comment",  userId, commentDto);
     }
 

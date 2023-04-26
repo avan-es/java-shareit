@@ -7,13 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.BadRequest;
-import ru.practicum.shareit.item.comment.CommentGatewayDto;
-import ru.practicum.shareit.item.dto.ItemGatewayDto;
+import ru.practicum.shareit.item.comment.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoFroRequest;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@Controller
+//@Controller
+@RestController
+
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor
 @Slf4j
@@ -23,21 +26,23 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> addItem(@RequestBody ItemGatewayDto item,
+    public ResponseEntity<Object> addItem(@RequestBody ItemDto item,
                                           @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         return itemClient.addItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(@RequestBody ItemGatewayDto itemDto,
+    public ResponseEntity<Object> updateItem(@RequestBody ItemDto itemDto,
                               @RequestHeader (value = "X-Sharer-User-Id") Long userId,
                               @PathVariable Long itemId) {
-        return itemClient.updateItem(itemId, itemDto, userId);
+        return itemClient.updateItem(userId, itemDto, itemId);
     }
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getItem(@PathVariable Long itemId,
-                           @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+                                          @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
+        ResponseEntity<Object> response = itemClient.getItem(itemId, userId);
+        System.out.println(response.getBody());
         return itemClient.getItem(itemId, userId);
     }
 
@@ -45,7 +50,7 @@ public class ItemController {
     public ResponseEntity<Object> getUsersItems(@RequestHeader (value = "X-Sharer-User-Id") Long userId,
                                        @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                        @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
-        return itemClient.getUsersItems(userId, from, size);
+        return itemClient.getUsersItems(from, size, userId);
     }
 
     @GetMapping("/search")
@@ -53,7 +58,7 @@ public class ItemController {
                                     @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size,
                                     @RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemClient.searchItem(text, from, size, userId);
+        return itemClient.searchItem(from, size, userId, text);
     }
 
     @GetMapping("/all")
@@ -68,12 +73,12 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> addComment(@RequestBody CommentGatewayDto commentDto,
+    public ResponseEntity<Object> addComment(@RequestBody CommentDto commentDto,
                                  @PathVariable Long itemId,
                                  @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
         if (commentDto.getText().isBlank()) {
             throw new BadRequest("Текст отзыва не может быть пустым.");
         }
-        return itemClient.addComment(commentDto, itemId, userId);
+        return itemClient.addComment(userId, itemId, commentDto);
     }
 }

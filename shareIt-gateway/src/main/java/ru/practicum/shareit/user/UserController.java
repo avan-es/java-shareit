@@ -11,7 +11,8 @@ import ru.practicum.shareit.user.dto.UserGatewayForUpdateDto;
 
 import javax.validation.Valid;
 
-@Controller
+//@Controller
+@RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 @Slf4j

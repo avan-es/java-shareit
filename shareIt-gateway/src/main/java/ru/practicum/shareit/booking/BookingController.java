@@ -6,14 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingState;
 import ru.practicum.shareit.exception.BadRequest;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@Controller
+//@Controller
+@RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 @Slf4j
@@ -23,7 +24,7 @@ public class BookingController {
     private final BookingClient bookingClient;
 
     @PostMapping
-    public ResponseEntity<Object> addBooking(@RequestBody BookingRequestDto booking,
+    public ResponseEntity<Object> addBooking(@RequestBody BookItemRequestDto booking,
                                              @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Пользователь с userId={} создаёт бронирование booking={}.", userId, booking);
         return bookingClient.addBooking(booking, userId);

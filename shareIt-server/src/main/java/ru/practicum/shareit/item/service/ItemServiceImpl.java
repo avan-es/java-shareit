@@ -84,9 +84,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getUsersItems(Long userId, Pageable pageable) {
         userValidation.isPresent(userId);
-        Slice<Item> itemSlice = itemRepository.getAllByOwner(userId, pageable);
+        Slice<Item> itemSlice = itemRepository.getAllByOwnerOrderById(userId, pageable);
         while (!itemSlice.hasContent() && itemSlice.getNumber() > 0) {
-            itemSlice = itemRepository.getAllByOwner(userId, PageRequest.of(itemSlice.getNumber() - 1, itemSlice.getSize()));
+            itemSlice = itemRepository.getAllByOwnerOrderById(userId, PageRequest.of(itemSlice.getNumber() - 1, itemSlice.getSize()));
         }
         List<ItemDto> result = new ArrayList<>();
         ItemDto itemDto = new ItemDto();
