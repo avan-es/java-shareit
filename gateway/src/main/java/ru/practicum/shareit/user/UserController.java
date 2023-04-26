@@ -3,7 +3,6 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserGatewayDto;
@@ -11,7 +10,6 @@ import ru.practicum.shareit.user.dto.UserGatewayForUpdateDto;
 
 import javax.validation.Valid;
 
-//@Controller
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
