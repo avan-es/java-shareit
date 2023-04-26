@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   gateway:
-    build: shareit-gateway
+    build: gateway
     image: shareit-gateway
     container_name: shareit-gateway
     ports:
@@ -13,7 +13,7 @@ services:
       #- TZ=Europe/Moscow
 
   server:
-    build: shareit-server
+    build: server
     image: shareit-server
     container_name: shareit-server
     ports:
