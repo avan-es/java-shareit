@@ -11,7 +11,7 @@ import java.util.List;
 @Component("dbItemRepository")
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    Slice<Item> getAllByOwner(Long id, Pageable pageable);
+    Slice<Item> getAllByOwnerOrderById(Long id, Pageable pageable);
 
     Slice<Item> searchByNameOrDescriptionContainingIgnoreCase(String name, String description, Pageable page);
 
