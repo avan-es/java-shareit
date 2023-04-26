@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item.dto;
 
 import jdk.jfr.BooleanFlag;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Transient;
 
 import javax.validation.constraints.NotBlank;
