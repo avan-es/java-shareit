@@ -11,8 +11,8 @@
 	</parent>
 
 	<modules>
-		<module>shareIt-server</module>
-		<module>shareIt-gateway</module>
+		<module>server</module>
+		<module>gateway</module>
 	</modules>
 
 	<groupId>ru.practicum</groupId>
