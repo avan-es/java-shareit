@@ -74,8 +74,8 @@ public class BookingController {
                                     @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
                                     @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
-        log.info("Владелец с userId={} запрашивает бронирования своих вещей со следующими параметрами: state={}, from={}, size={}.",
-                userId, stateValue, from, size);
+        log.info("Владелец с userId={} запрашивает бронирования своих вещей. Параметры запроса: " +
+                        "state={}, from={}, size={}.", userId, stateValue, from, size);
         BookingState.from(stateValue)
                 .orElseThrow(() -> new BadRequest("Unknown state: " + stateValue));
         return bookingClient.getAllOwnerBookings(userId, stateValue, from, size, true);
