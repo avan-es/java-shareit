@@ -34,7 +34,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(
-                                    @RequestBody @Valid ItemGatewayDto itemGatewayDto,
+                                    @RequestBody ItemGatewayDto itemGatewayDto,
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                     @Valid @Positive(message = "ID вещей должно быть > 0.")
