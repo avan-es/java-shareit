@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserGatewayDto {
-    Long id;
-    String name;
-    @Email(message = "Невалидная почта")
-    @NotBlank(message = "Почта не может быть пустой")
-    String email;
+    @NotBlank(message = "Имя не может быть пустым.")
+    private String name;
+    @Email(message = "Невалидная почта.")
+    @NotBlank(message = "Почта не может быть пустой.")
+    private String email;
 }
 

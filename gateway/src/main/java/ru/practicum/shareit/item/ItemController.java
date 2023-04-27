@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.BadRequest;
-import ru.practicum.shareit.item.comment.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.comment.CommentGatewayDto;
+import ru.practicum.shareit.item.dto.ItemGatewayDto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -23,16 +23,16 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Object> addItem(@RequestBody ItemDto item,
+    public ResponseEntity<Object> addItem(@RequestBody ItemGatewayDto item,
                                           @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         return itemClient.addItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(@RequestBody ItemDto itemDto,
+    public ResponseEntity<Object> updateItem(@RequestBody ItemGatewayDto itemGatewayDto,
                               @RequestHeader (value = "X-Sharer-User-Id") Long userId,
                               @PathVariable Long itemId) {
-        return itemClient.updateItem(userId, itemDto, itemId);
+        return itemClient.updateItem(userId, itemGatewayDto, itemId);
     }
 
     @GetMapping("/{itemId}")
@@ -70,12 +70,12 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> addComment(@RequestBody CommentDto commentDto,
+    public ResponseEntity<Object> addComment(@RequestBody CommentGatewayDto commentGatewayDto,
                                  @PathVariable Long itemId,
                                  @RequestHeader (value = "X-Sharer-User-Id") Long userId) {
-        if (commentDto.getText().isBlank()) {
+        if (commentGatewayDto.getText().isBlank()) {
             throw new BadRequest("Текст отзыва не может быть пустым.");
         }
-        return itemClient.addComment(userId, itemId, commentDto);
+        return itemClient.addComment(userId, itemId, commentGatewayDto);
     }
 }

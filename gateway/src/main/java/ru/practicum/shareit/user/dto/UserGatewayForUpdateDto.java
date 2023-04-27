@@ -12,8 +12,7 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 @Setter
 public class UserGatewayForUpdateDto {
-    Long id;
-    String name;
+    private String name;
     @Email(message = "Невалидная почта")
-    String email;
+    private String email;
 }

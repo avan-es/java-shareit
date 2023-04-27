@@ -8,8 +8,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.item.comment.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.comment.CommentGatewayDto;
+import ru.practicum.shareit.item.dto.ItemGatewayDto;
 
 import java.util.Map;
 
@@ -28,12 +28,12 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> addItem(ItemDto item, Long userId) {
+    public ResponseEntity<Object> addItem(ItemGatewayDto item, Long userId) {
         return post("", userId, item);
     }
 
-    public ResponseEntity<Object> updateItem(Long userId, ItemDto itemDto, Long itemId) {
-        return patch("/" + itemId, userId, itemDto);
+    public ResponseEntity<Object> updateItem(Long userId, ItemGatewayDto itemGatewayDto, Long itemId) {
+        return patch("/" + itemId, userId, itemGatewayDto);
     }
 
     public ResponseEntity<Object> getItem(Long itemId, Long userId) {
@@ -73,8 +73,8 @@ public class ItemClient extends BaseClient {
         return delete("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> addComment(Long userId, Long itemId, CommentDto commentDto) {
-        return post("/" + itemId + "/comment",  userId, commentDto);
+    public ResponseEntity<Object> addComment(Long userId, Long itemId, CommentGatewayDto commentGatewayDto) {
+        return post("/" + itemId + "/comment",  userId, commentGatewayDto);
     }
 
 }

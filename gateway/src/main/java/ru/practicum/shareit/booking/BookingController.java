@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookItemRequestDto;
+import ru.practicum.shareit.booking.dto.BookItemGatewayDto;
 import ru.practicum.shareit.booking.dto.BookingState;
 import ru.practicum.shareit.exception.BadRequest;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping(path = "/bookings")
@@ -22,16 +24,24 @@ public class BookingController {
     private final BookingClient bookingClient;
 
     @PostMapping
-    public ResponseEntity<Object> addBooking(@RequestBody BookItemRequestDto booking,
-                                             @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> addBooking(
+                                    @RequestBody @Valid BookItemGatewayDto booking,
+                                    @Valid @Positive
+                                    @RequestHeader(value = "X-Sharer-User-Id")
+                                    Long userId) {
         log.info("Пользователь с userId={} создаёт бронирование booking={}.", userId, booking);
         return bookingClient.addBooking(booking, userId);
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Object> updateItem(@RequestHeader (value = "X-Sharer-User-Id") Long userId,
-                                 @PathVariable Long bookingId,
-                                 @RequestParam Boolean approved) {
+    public ResponseEntity<Object> updateItem(
+                                    @Valid @Positive
+                                    @RequestHeader (value = "X-Sharer-User-Id")
+                                    Long userId,
+                                    @Valid @Positive
+                                    @PathVariable
+                                    Long bookingId,
+                                    @RequestParam Boolean approved) {
         log.info("Пользователь с userId={} отвечает на запрос бронирования с bookingId={}." +
                 "Ответ: {}.", userId, bookingId, approved);
         return bookingClient.updateItem(userId, bookingId, approved);
@@ -44,10 +54,12 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAllUsersBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                                @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
-                                                @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                                @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
+    public ResponseEntity<Object> getAllUsersBookings(
+                                    @Valid @Positive
+                                    @RequestHeader(value = "X-Sharer-User-Id") Long userId,
+                                    @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
+                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         log.info("Пользователь с userId={} запрашивает свои бронирования со следующими параметрами: state={}, from={}, size={}.",
                 userId, stateValue, from, size);
         BookingState.from(stateValue)
@@ -56,10 +68,12 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> getAllOwnerBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                                @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
-                                                @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
-                                                @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
+    public ResponseEntity<Object> getAllOwnerBookings(
+                                    @Valid @Positive
+                                    @RequestHeader(value = "X-Sharer-User-Id") Long userId,
+                                    @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
+                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         log.info("Владелец с userId={} запрашивает бронирования своих вещей со следующими параметрами: state={}, from={}, size={}.",
                 userId, stateValue, from, size);
         BookingState.from(stateValue)
@@ -68,8 +82,11 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> getBooking(@PathVariable Long bookingId,
-                                 @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getBooking(
+                                    @Valid @Positive
+                                    @PathVariable Long bookingId,
+                                    @Valid @Positive
+                                    @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Пользователь с userId={} запрашивает информацию о бронирование с bookingId={}.", userId, bookingId);
         return bookingClient.getBooking(bookingId, userId);
     }
