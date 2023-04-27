@@ -35,7 +35,7 @@ public class UserController {
     @PatchMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
                                     @RequestBody @Valid UserGatewayForUpdateDto userDto,
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @PathVariable
                                     Long userId) {
         log.info("Обновление пользователя с userId={}.", userId);
@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Object> getUser(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @PathVariable
                                     Long userId) {
         log.info("Запрос на получение пользователя с userId={}.", userId);
@@ -53,24 +53,24 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @PathVariable
                                     Long userId) {
         log.info("Удаление пользователя с userId={}.", userId);
         return userClient.deleteUser(userId);
     }
 
-    private String hideEmail(UserGatewayDto user){
+    private String hideEmail(UserGatewayDto user) {
         StringBuilder email = new StringBuilder();
         String[] parts = user.getEmail().split("@");
         int loginSize = parts[0].length();
-        if (loginSize>5) {
+        if (loginSize > 5) {
             email.append(parts[0], 0, 3);
             for (int i = 3; i < parts[0].length() - 1; i++) {
                 email.append("*");
             }
             email.append(parts[0], parts[0].length() - 1, parts[0].length());
-        } else if (loginSize>2){
+        } else if (loginSize > 2) {
             email.append(parts[0].substring(0,1));
             for (int i = 1; i < parts[0].length() - 1; i++) {
                 email.append("*");

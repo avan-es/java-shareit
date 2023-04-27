@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestGatewayDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -22,7 +23,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<Object> add(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader("X-Sharer-User-Id") Long userId,
                                     @RequestBody @Valid ItemRequestGatewayDto request) {
         log.info("Пользователь с userId={} запросил вещь: {}.", userId, request.getDescription());
@@ -31,27 +32,29 @@ public class ItemRequestController {
 
     @GetMapping
     public ResponseEntity<Object> getUsersRequests(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Пользователь с userId={} выгружает список запрошенных им вещей.", userId);
         return requestClient.getUsersRequests(userId);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> getRequests(@PositiveOrZero
-                                              @RequestParam(value = "from", required = false) Integer from,
-                                              @Positive
-                                              @RequestParam(value = "size", required = false) Integer size,
-                                              @Valid @Positive
-                                              @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getRequests(
+                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size,
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Пользователь с userId={} выгружает список всех запрошенных вещей. Параметры запроса: " +
                 "from={}, size={}.", userId, from, size);
         return requestClient.getRequests(from, size, userId);
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                 @PathVariable Long requestId) {
+    public ResponseEntity<Object> getRequestById(
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
+                                    @RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @Valid @Positive(message = "ID запроса должно быть > 0.")
+                                    @PathVariable Long requestId) {
         log.info("Пользователь с userId={} выгружает запрос с requestId={}.", userId, requestId);
         return requestClient.getRequestById(userId, requestId);
     }

@@ -26,7 +26,7 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Object> addBooking(
                                     @RequestBody @Valid BookItemGatewayDto booking,
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id")
                                     Long userId) {
         log.info("Пользователь с userId={} создаёт бронирование booking={}.", userId, booking);
@@ -35,10 +35,10 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> updateItem(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader (value = "X-Sharer-User-Id")
                                     Long userId,
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID запроса должно быть > 0.")
                                     @PathVariable
                                     Long bookingId,
                                     @RequestParam Boolean approved) {
@@ -55,13 +55,13 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<Object> getAllUsersBookings(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                     @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
                                     @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
-        log.info("Пользователь с userId={} запрашивает свои бронирования со следующими параметрами: state={}, from={}, size={}.",
-                userId, stateValue, from, size);
+        log.info("Пользователь с userId={} запрашивает свои бронирования. Параметры запроса: " +
+                        "state={}, from={}, size={}.", userId, stateValue, from, size);
         BookingState.from(stateValue)
                 .orElseThrow(() -> new BadRequest("Unknown state: " + stateValue));
         return bookingClient.getAllUsersBookings(userId, stateValue, from, size, false);
@@ -69,7 +69,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getAllOwnerBookings(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                     @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
                                     @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
@@ -83,9 +83,9 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBooking(
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID запроса должно быть > 0.")
                                     @PathVariable Long bookingId,
-                                    @Valid @Positive
+                                    @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Пользователь с userId={} запрашивает информацию о бронирование с bookingId={}.", userId, bookingId);
         return bookingClient.getBooking(bookingId, userId);
