@@ -22,7 +22,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Object> addUser(
                                     @RequestBody @Valid UserGatewayDto user) {
-        log.info("Создание пользователя с именем: {} и почтой: {}.", user.getName(), hideEmail(user));
+        log.info("Создание пользователя с именем: {} и почтой: {}.", user.getName(),
+                user.getEmail().replaceAll("(?<=.{2}).(?=[^@]*?@)", "*"));
         return userClient.addUser(user);
     }
 
@@ -58,28 +59,5 @@ public class UserController {
                                     Long userId) {
         log.info("Удаление пользователя с userId={}.", userId);
         return userClient.deleteUser(userId);
-    }
-
-    private String hideEmail(UserGatewayDto user) {
-        StringBuilder email = new StringBuilder();
-        String[] parts = user.getEmail().split("@");
-        int loginSize = parts[0].length();
-        if (loginSize > 5) {
-            email.append(parts[0], 0, 3);
-            for (int i = 3; i < parts[0].length() - 1; i++) {
-                email.append("*");
-            }
-            email.append(parts[0], parts[0].length() - 1, parts[0].length());
-        } else if (loginSize > 2) {
-            email.append(parts[0].substring(0,1));
-            for (int i = 1; i < parts[0].length() - 1; i++) {
-                email.append("*");
-            }
-            email.append(parts[0], parts[0].length() - 1, parts[0].length());
-        } else {
-            email.append(parts[0]);
-        }
-        email.append("@").append(parts[1]);
-        return email.toString();
     }
 }
