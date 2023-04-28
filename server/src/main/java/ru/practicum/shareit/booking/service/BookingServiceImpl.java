@@ -8,12 +8,14 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.enums.BookingState;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.validation.BookingValidation;
-import ru.practicum.shareit.exeptions.*;
+import ru.practicum.shareit.exeptions.BadRequest;
+import ru.practicum.shareit.exeptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.item.validation.ItemValidation;
@@ -22,6 +24,7 @@ import ru.practicum.shareit.user.model.UserMapper;
 import ru.practicum.shareit.user.validation.UserValidation;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -105,9 +108,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getBookingByState(Long userId, String state, Pageable pageable, Boolean isOwner) {
-//        if (Arrays.stream(BookingState.values()).noneMatch(bookingState -> bookingState.toString().equals(state))) {
-//            throw new BadRequest(String.format("Unknown state: %s", state));
-//        }
+        if (Arrays.stream(BookingState.values()).noneMatch(bookingState -> bookingState.toString().equals(state))) {
+            throw new BadRequest(String.format("Unknown state: %s", state));
+        }
         userValidation.isPresent(userId);
         Slice<BookingDto> bookingDtoSlice = getSliceOfBookingDto(userId, state, pageable, isOwner);
         while (!bookingDtoSlice.hasContent() && bookingDtoSlice.getNumber() > 0) {
