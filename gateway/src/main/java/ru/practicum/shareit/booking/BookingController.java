@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping(path = "/bookings")
@@ -58,7 +59,7 @@ public class BookingController {
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                     @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         log.info("Пользователь с userId={} запрашивает свои бронирования. Параметры запроса: " +
                         "state={}, from={}, size={}.", userId, stateValue, from, size);
@@ -72,7 +73,7 @@ public class BookingController {
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                     @RequestParam(name = "state", defaultValue = "ALL") String stateValue,
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         log.info("Владелец с userId={} запрашивает бронирования своих вещей. Параметры запроса: " +
                         "state={}, from={}, size={}.", userId, stateValue, from, size);

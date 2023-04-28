@@ -11,6 +11,7 @@ import ru.practicum.shareit.request.service.ItemRequestService;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequestDto> getAllRequests(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                            @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                            @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer page,
                                             @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         return requestService.findAll(userId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "created")));
     }

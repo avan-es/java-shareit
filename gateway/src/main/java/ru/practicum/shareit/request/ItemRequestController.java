@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -40,7 +41,7 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public ResponseEntity<Object> getRequests(
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size,
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader("X-Sharer-User-Id") Long userId) {

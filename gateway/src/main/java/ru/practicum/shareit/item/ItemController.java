@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 
@@ -57,7 +58,7 @@ public class ItemController {
     public ResponseEntity<Object> getUsersItems(
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader(value = "X-Sharer-User-Id") Long userId,
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         log.info("Пользователь с userId={} выгружает список своих вещей. Параметры запроса: " +
                 "from={}, size={}.", userId, from, size);
@@ -67,7 +68,7 @@ public class ItemController {
     @GetMapping("/search")
     public ResponseEntity<Object> searchItem(
                                     @RequestParam String text,
-                                    @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
+                                    @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                     @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size,
                                     @Valid @Positive(message = "ID пользователя должен быть > 0.")
                                     @RequestHeader("X-Sharer-User-Id") Long userId) {

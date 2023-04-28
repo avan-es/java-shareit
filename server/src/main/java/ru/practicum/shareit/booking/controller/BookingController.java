@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getAllUsersBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                           @RequestParam(name = "state", defaultValue = "ALL") String state,
-                                          @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                          @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer page,
                                           @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         return bookingService.getBookingByState(userId, state, PageRequest.of(page, size), false);
     }
@@ -47,7 +48,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> getAllOwnerBookings(@RequestHeader(value = "X-Sharer-User-Id") Long userId,
                                              @RequestParam(name = "state", defaultValue = "ALL") String state,
-                                             @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer page,
+                                             @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer page,
                                              @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(50) Integer size) {
         return bookingService.getBookingByState(userId, state, PageRequest.of(page, size), true);
     }
