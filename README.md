@@ -1,2 +1,3 @@
 # java-shareit
-Template repository for Shareit project.
+Описание в процессе оформления.
+Проект для аренды вещей.
