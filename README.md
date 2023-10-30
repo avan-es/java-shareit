@@ -164,3 +164,5 @@
 
 [ShareIt-Postman-Tests.postman_collection.json](https://github.com/avan-es/java-shareit/blob/main/postman/ShareIt-Postman-Tests.postman_collection.json)
 
+Также написаны тесты в самом приложении (JUnit, Mockito). Покрытие: 95% (Class), 91% (Method) и 82% (Line).
+
