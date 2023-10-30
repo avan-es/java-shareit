@@ -1,4 +1,4 @@
-# ShareIt (Вещь в аренду) ОПИСАНИЕ ПРОЕКТА В РАЗРАБОТКЕ
+# ShareIt (Вещь в аренду)
 
 Многомодульное приложение. Сервис для шеринга вещей. Обеспечивает пользователям, во-первых, возможность рассказать, какими вещами они готовы поделиться, а во-вторых, находить нужную вещь и брать её в аренду на какое-то время.
 
@@ -25,6 +25,8 @@
 Запуск приложения настроен через **Docker**. Приложения **server**, **gateway** и **база данных PostgreSQL** запускаются в отдельном Docker-контейнере каждый. Их взаимодействие настроено через Docker Compose.
 
 # Схема БД
+
+![Схема БД](https://github.com/avan-es/java-shareit/assets/83888190/61b2ea7e-bc35-4939-95a4-3d5b01174952)
 
 # Функционал и эндпоинты
 
@@ -73,7 +75,7 @@
     </tr>
     <tr>
         <th colspan="2">
-          <img width="50" src="https://github.com/avan-es/java-filmorate/assets/83888190/44063823-9839-4876-8791-ed41d8b8453f"/><br>ItemController
+          <img width="50" src="https://github.com/avan-es/java-shareit/assets/83888190/efd9ef0d-823e-4209-87b7-eea1c719d0d6"/><br>ItemController
         </th>
       </tr>
     <tr>
@@ -102,7 +104,7 @@
     </tr>
     <tr>
         <th colspan="2">
-          <img width="50" src="https://github.com/avan-es/java-filmorate/assets/83888190/7947d063-025b-4e50-bb1e-e729f19ec18e"/><br>BookingController
+          <img width="50" src="https://github.com/avan-es/java-shareit/assets/83888190/e1ac2db1-3f08-48c5-8d56-ce1ce04dea66"/><br>BookingController
         </th>
       </tr>
     <tr>
@@ -125,7 +127,7 @@
     </tr>
     <tr>
         <th colspan="2">
-          <img width="50" src="https://github.com/avan-es/java-filmorate/assets/83888190/a8c3e005-c3c8-4052-9f59-03ba594f956f"/><br>ItemRequestController
+          <img width="50" src="https://github.com/avan-es/java-shareit/assets/83888190/f4e7294c-b1aa-4bcc-bdf0-b456bcaf1db7"/><br>ItemRequestController
         </th>
       </tr>
     <tr>
